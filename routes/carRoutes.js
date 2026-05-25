@@ -1,6 +1,13 @@
 const express = require("express");
+const upload = require("../middleware/uploadMiddleware");
 
-const { addCar, getCars } = require("../controllers/carController");
+const {
+    addCar,
+    getCars,
+    getCarById,
+    updateCar,
+    deleteCar
+} = require("../controllers/carController");
 
 const {
     protect,
@@ -9,15 +16,23 @@ const {
 
 const router = express.Router();
 
-// public route
+// public routes
 router.get("/", getCars);
+router.get("/:id", getCarById);
 
-// protected + admin only route
+// protected admin route
 router.post(
     "/add",
     protect,
     adminOnly,
+   
     addCar
 );
+
+// update car (admin only)
+router.put("/:id", protect, adminOnly, updateCar);
+
+// delete car (admin only)
+router.delete("/:id", protect, adminOnly, deleteCar);
 
 module.exports = router;

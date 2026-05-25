@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 dotenv.config();
 
@@ -24,3 +25,4 @@ app.listen(PORT, () => {
 const carRoutes = require("./routes/carRoutes");
 
 app.use("/api/cars", carRoutes);
+app.use("/api/users", userRoutes);
