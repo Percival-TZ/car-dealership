@@ -94,9 +94,42 @@ const getProfile = async (req, res) => {
     }
 };
 
+const updateProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        user.username = req.body.username || user.username;
+        user.email = req.body.email || user.email;
+
+        await user.save();
+
+        res.json({
+            message: "Profile updated",
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                role: user.role
+            }
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
 module.exports = {
     addFavorite,
     getFavorites,
     removeFavorite,
-    getProfile
+    getProfile,
+    updateProfile
 };

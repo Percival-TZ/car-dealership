@@ -4,7 +4,8 @@ const carSchema = new mongoose.Schema(
 {
     title: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
 
     brand: {
@@ -14,30 +15,21 @@ const carSchema = new mongoose.Schema(
 
     year: {
         type: Number,
-        required: true
+        required: true,
+        min: 1900,
+        max: new Date().getFullYear() + 1
     },
 
-    fuelType: {
-        type: String
-    },
-
-    transmission: {
-        type: String
-    },
-
-    description: {
-        type: String
-    },
-
-       price: {
+    price: {
         type: Number,
-        required: true
+        required: true,
+        min: 0
     },
 
-
-    images: [{
-        type: String
-    }],
+    images: {
+        type: [String],
+        default: []
+    },
 
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,

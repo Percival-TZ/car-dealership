@@ -4,7 +4,8 @@ const {
     addFavorite,
     getFavorites,
     removeFavorite,
-    getProfile
+    getProfile,
+    updateProfile
 } = require("../controllers/userController");
 
 const { protect } = require("../middleware/authMiddleware");
@@ -37,4 +38,9 @@ router.get(
     getProfile
 );
 
+router.put(
+    "/profile",
+    protect,
+    updateProfile
+);
 module.exports = router;

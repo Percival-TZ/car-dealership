@@ -3,6 +3,8 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+
 
 dotenv.config();
 
@@ -23,6 +25,9 @@ app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 const carRoutes = require("./routes/carRoutes");
+const { errorHandler } = require("./middleware/errorMiddleware");
 
 app.use("/api/cars", carRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/admin", adminRoutes);
+app.use(errorHandler);
