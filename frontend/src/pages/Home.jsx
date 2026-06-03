@@ -31,10 +31,13 @@ function Home() {
     }, []);
 
     return (
+    <div className="container">
 
-        <div>
+        <h1>Available Cars</h1>
 
-            <h1>Car Dealership</h1>
+        <br />
+
+        <div className="car-grid">
 
             {cars.map((car) => (
 
@@ -47,7 +50,8 @@ function Home() {
 
         </div>
 
-    );
+    </div>
+);
 }
 
 export default Home;

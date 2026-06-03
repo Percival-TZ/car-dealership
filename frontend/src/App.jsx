@@ -10,13 +10,28 @@ import Home from "./pages/Home.jsx";
 
 function App() {
     return (
-        <>
-            <Login />
-            <Favorites />
-            <Register />
-            <AdminDashboard />
-            <Home />
-        </>
+        <BrowserRouter>
+
+            <Navbar />
+
+            <Routes>
+
+                <Route path="/" element={<Home />} />
+
+                <Route path="/login" element={<Login />} />
+
+                <Route path="/register" element={<Register />} />
+
+                <Route path="/favorites" element={<Favorites />} />
+
+                <Route
+                    path="/admin"
+                    element={<AdminDashboard />}
+                />
+
+            </Routes>
+
+        </BrowserRouter>
     );
 }
 
