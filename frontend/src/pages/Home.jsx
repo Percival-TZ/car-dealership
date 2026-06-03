@@ -5,6 +5,7 @@ import CarCard from "../components/CarCard";
 
 function Home() {
 
+    const [search, setSearch] = useState("");
     const [cars, setCars] = useState([]);
 
     useEffect(() => {
@@ -30,16 +31,27 @@ function Home() {
 
     }, []);
 
+    const filteredCars = cars.filter((car) =>
+    car.title.toLowerCase().includes(search.toLowerCase())
+);
+
     return (
     <div className="container">
 
         <h1>Available Cars</h1>
 
         <br />
+        
+        <input
+    type="text"
+    placeholder="Search cars..."
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+/>
 
         <div className="car-grid">
 
-            {cars.map((car) => (
+            {filteredCars.map((car) => (
 
                 <CarCard
                     key={car._id}
