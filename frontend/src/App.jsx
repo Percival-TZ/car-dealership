@@ -7,6 +7,7 @@ import Favorites from "./pages/Favourates.jsx";
 import Register from "./pages/Register.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import Home from "./pages/Home.jsx";
+import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 
 function App() {
     return (
@@ -25,10 +26,13 @@ function App() {
                 <Route path="/favorites" element={<Favorites />} />
 
                 <Route
-                    path="/admin"
-                    element={<AdminDashboard />}
-                />
-
+    path="/admin"
+    element={
+        <ProtectedAdminRoute>
+            <AdminDashboard />
+        </ProtectedAdminRoute>
+    }
+/>
             </Routes>
 
         </BrowserRouter>

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { loginUser } from "../services/authService";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         email: "",
@@ -35,9 +37,12 @@ function Login() {
                 JSON.stringify(data.user)
             );
 
-            alert("Login successful!");
-
+            console.log("Logged in successfully");
             console.log(data);
+
+            alert("Login successful!");
+            console.log("About to go navigation")
+            navigate("/")
 
         } catch (error) {
 
@@ -62,6 +67,7 @@ function Login() {
                     placeholder="Email"
                     value={formData.email}
                     onChange={handleChange}
+                    required
                 />
 
                 <br /><br />
@@ -72,6 +78,7 @@ function Login() {
                     placeholder="Password"
                     value={formData.password}
                     onChange={handleChange}
+                    required
                 />
 
                 <br /><br />
