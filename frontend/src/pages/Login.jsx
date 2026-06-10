@@ -59,39 +59,55 @@ function Login() {
 
     return (
 
-        <div className="container">
+        <div className="auth-page">
 
-            <h1>Login</h1>
+            <div className="auth-card">
 
-            <form onSubmit={handleSubmit}>
+                <h1>Staff Login</h1>
 
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                />
+                <p className="auth-subtitle">
+                    Sign in to access the dealership dashboard
+                </p>
 
-                <br /><br />
+                <form onSubmit={handleSubmit}>
 
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                />
+                    <label className="auth-label" htmlFor="email">
+                        Email
+                    </label>
 
-                <br /><br />
+                    <input
+                        id="email"
+                        className="auth-input"
+                        type="email"
+                        name="email"
+                        placeholder="you@example.com"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                    />
 
-                <button type="submit">
-                    Login
-                </button>
+                    <label className="auth-label" htmlFor="password">
+                        Password
+                    </label>
 
-            </form>
+                    <input
+                        id="password"
+                        className="auth-input"
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                    />
+
+                    <button className="auth-button" type="submit">
+                        Login
+                    </button>
+
+                </form>
+
+            </div>
 
         </div>
 

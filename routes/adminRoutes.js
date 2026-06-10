@@ -1,7 +1,11 @@
 const express = require("express");
 
 const {
-    getDashboardStats
+    getDashboardStats,
+    getUsers,
+    getBookings,
+    cancelBooking,
+    clearBookings
 } = require("../controllers/adminController");
 
 const {
@@ -16,6 +20,34 @@ router.get(
     protect,
     adminOnly,
     getDashboardStats
+);
+
+router.get(
+    "/users",
+    protect,
+    adminOnly,
+    getUsers
+);
+
+router.get(
+    "/bookings",
+    protect,
+    adminOnly,
+    getBookings
+);
+
+router.delete(
+    "/bookings/:id",
+    protect,
+    adminOnly,
+    cancelBooking
+);
+
+router.delete(
+    "/bookings",
+    protect,
+    adminOnly,
+    clearBookings
 );
 
 module.exports = router;

@@ -65,3 +65,143 @@ body {
 .car-card p {
     margin-bottom: 5px;
 }
+
+.car-card input[type="datetime-local"] {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+}
+
+.car-card button {
+    width: 100%;
+    padding: 10px;
+
+    background: #111827;
+    color: white;
+    border: none;
+    border-radius: 6px;
+
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: background 0.2s;
+}
+
+.car-card button:hover {
+    background: #2563eb;
+}
+
+.admin-tabs {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    border-bottom: 1px solid #d1d5db;
+}
+
+.admin-tab {
+    padding: 10px 20px;
+
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+
+    font-size: 1rem;
+    font-weight: 600;
+    color: #6b7280;
+    cursor: pointer;
+}
+
+.admin-tab.active {
+    color: #111827;
+    border-bottom-color: #2563eb;
+}
+
+.admin-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.auth-page {
+    width: 100%;
+    min-height: calc(100vh - 64px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.auth-card h1 {
+    text-align: center;
+    margin-bottom: 8px;
+    color: #111827;
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 30px;
+    font-size: 0.9rem;
+}
+
+.auth-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.auth-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.auth-button {
+    width: 100%;
+    padding: 12px;
+
+    background: #111827;
+    color: white;
+    border: none;
+    border-radius: 8px;
+
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: background 0.2s;
+}
+
+.auth-button:hover {
+    background: #2563eb;
+}
