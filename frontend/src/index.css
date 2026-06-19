@@ -205,3 +205,683 @@ body {
 .auth-button:hover {
     background: #2563eb;
 }
+
+.auth-error {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.auth-link {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+}
+
+/* Navbar */
+.nav-brand {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.nav-username {
+    color: #d1d5db;
+    font-size: 0.9rem;
+}
+
+.nav-logout-btn {
+    background: transparent;
+    color: white;
+    border: 1px solid #4b5563;
+    border-radius: 6px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.nav-logout-btn:hover {
+    background: #374151;
+}
+
+/* Condition badge */
+.condition-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+}
+
+.condition-badge.new {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.condition-badge.used {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* Car card updates */
+.car-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.car-card-header h2 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.view-details-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 14px;
+    background: #111827;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    box-sizing: border-box;
+}
+
+.view-details-btn:hover {
+    background: #2563eb;
+}
+
+/* Card actions (favorites, my orders) */
+.card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.view-btn {
+    flex: 1;
+    padding: 9px;
+    background: #111827;
+    color: white;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.view-btn:hover {
+    background: #2563eb;
+}
+
+.remove-btn {
+    flex: 1;
+    padding: 9px;
+    background: white;
+    color: #dc2626;
+    border: 1px solid #dc2626;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.remove-btn:hover {
+    background: #dc2626;
+    color: white;
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b7280;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+}
+
+/* Orders list */
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.order-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.order-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.order-card-header h2 {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.order-card p {
+    color: #374151;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+}
+
+.order-placed {
+    color: #9ca3af !important;
+    font-size: 0.85rem !important;
+    margin-top: 8px;
+}
+
+/* Status badge */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge.confirmed {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-badge.cancelled {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+/* Car details page */
+.back-btn {
+    background: none;
+    border: none;
+    color: #2563eb;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.back-btn:hover {
+    text-decoration: underline;
+}
+
+.car-details-card {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    margin-bottom: 40px;
+}
+
+.car-images {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.car-detail-img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.car-details-info h1 {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+    color: #111827;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+    margin-bottom: 24px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detail-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #9ca3af;
+    font-weight: 600;
+}
+
+.detail-value {
+    font-size: 1rem;
+    color: #111827;
+    font-weight: 600;
+}
+
+.price-tag {
+    font-size: 1.2rem;
+    color: #2563eb;
+}
+
+.car-actions {
+    border-top: 1px solid #f3f4f6;
+    padding-top: 24px;
+    margin-top: 8px;
+}
+
+.favorite-section {
+    margin-bottom: 24px;
+}
+
+.favorite-btn {
+    background: white;
+    color: #111827;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.favorite-btn:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+}
+
+.action-msg {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #2563eb;
+}
+
+.order-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    color: #111827;
+}
+
+.order-form {
+    max-width: 480px;
+}
+
+.order-form textarea.auth-input {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* ── Admin layout ── */
+.admin-layout {
+    min-height: calc(100vh - 64px);
+    background: #f9fafb;
+}
+
+.admin-topbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 24px;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.admin-page-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.admin-main {
+    padding: 28px 24px;
+    max-width: 960px;
+}
+
+/* ── Hamburger button ── */
+.hamburger-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 26px;
+    height: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.hamburger-btn span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: #111827;
+    border-radius: 2px;
+    transition: background 0.2s;
+}
+
+.hamburger-btn:hover span {
+    background: #2563eb;
+}
+
+/* ── Sidebar overlay ── */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 40;
+}
+
+/* ── Sidebar ── */
+.admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 260px;
+    background: #111827;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-sidebar.open {
+    transform: translateX(0);
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px;
+    border-bottom: 1px solid #374151;
+}
+
+.sidebar-title {
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.sidebar-close-btn {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+    border-radius: 4px;
+    transition: color 0.15s;
+}
+
+.sidebar-close-btn:hover {
+    color: white;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+    flex: 1;
+}
+
+.sidebar-nav-item {
+    width: 100%;
+    padding: 13px 24px;
+    text-align: left;
+    background: none;
+    border: none;
+    color: #d1d5db;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    border-left: 3px solid transparent;
+}
+
+.sidebar-nav-item:hover {
+    background: #1f2937;
+    color: white;
+}
+
+.sidebar-nav-item.active {
+    background: #1e3a5f;
+    color: white;
+    font-weight: 600;
+    border-left-color: #2563eb;
+}
+
+/* ── Admin content cards ── */
+.admin-card {
+    background: white;
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+    max-width: 640px;
+}
+
+.admin-success {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.admin-error {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+/* ── Add car form ── */
+.admin-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 540px) {
+    .admin-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.form-input {
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #111827;
+    background: #f9fafb;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.form-submit-btn {
+    padding: 11px 32px;
+    background: #111827;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.form-submit-btn:hover {
+    background: #2563eb;
+}
+
+/* ── Cars / Users grid ── */
+.admin-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.admin-item-card {
+    background: white;
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+}
+
+.admin-item-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.admin-item-card-header h3 {
+    font-size: 1rem;
+    color: #111827;
+    margin: 0;
+}
+
+.admin-item-card p {
+    font-size: 0.9rem;
+    color: #374151;
+    margin-bottom: 5px;
+}
+
+.admin-delete-btn {
+    margin-top: 12px;
+    padding: 7px 18px;
+    background: white;
+    color: #dc2626;
+    border: 1px solid #dc2626;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.admin-delete-btn:hover {
+    background: #dc2626;
+    color: white;
+}
+
+/* ── Bookings header ── */
+.admin-bookings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.admin-clear-btn {
+    padding: 7px 18px;
+    background: white;
+    color: #dc2626;
+    border: 1px solid #dc2626;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.admin-clear-btn:hover {
+    background: #dc2626;
+    color: white;
+}
+
+.admin-empty {
+    color: #9ca3af;
+    font-size: 1rem;
+    padding: 40px 0;
+}

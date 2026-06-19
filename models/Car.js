@@ -26,6 +26,12 @@ const carSchema = new mongoose.Schema(
         min: 0
     },
 
+    condition: {
+        type: String,
+        enum: ["new", "used"],
+        required: true
+    },
+
     images: {
         type: [String],
         default: []

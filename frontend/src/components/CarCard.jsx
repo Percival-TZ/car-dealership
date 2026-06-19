@@ -1,78 +1,22 @@
-import { useState } from "react";
-import axios from "axios";
+import { Link } from "react-router-dom";
 
 function CarCard({ car }) {
-
-    const [date, setDate] = useState("");
-
-    const bookTestDrive = async () => {
-
-        if (!date) {
-            alert("Please choose a date and time first");
-            return;
-        }
-
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-            alert("Please login to book a test drive");
-            return;
-        }
-
-        try {
-
-            await axios.post(
-                "http://localhost:3000/api/bookings",
-                {
-                    carId: car._id,
-                    date
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
-
-            alert("Test drive booked!");
-            setDate("");
-
-        } catch (error) {
-
-            console.log(error);
-
-            alert("Failed to book test drive");
-
-        }
-    };
-
     return (
         <div className="car-card">
+            <div className="car-card-header">
+                <h2>{car.title}</h2>
+                <span className={`condition-badge ${car.condition}`}>
+                    {car.condition === "new" ? "New" : "Used"}
+                </span>
+            </div>
 
-            <h2>{car.title}</h2>
+            <p><strong>Brand:</strong> {car.brand}</p>
+            <p><strong>Year:</strong> {car.year}</p>
+            <p><strong>Price:</strong> TZS {car.price.toLocaleString()}</p>
 
-            <p>
-                <strong>Brand:</strong> {car.brand}
-            </p>
-
-            <p>
-                <strong>Year:</strong> {car.year}
-            </p>
-
-            <p>
-                <strong>Price:</strong> TZS {car.price}
-            </p>
-
-            <input
-                type="datetime-local"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-            />
-
-            <button onClick={bookTestDrive}>
-                Book Test Drive
-            </button>
-
+            <Link to={`/cars/${car._id}`} className="view-details-btn">
+                View Details &amp; Order
+            </Link>
         </div>
     );
 }

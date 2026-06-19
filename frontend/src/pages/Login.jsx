@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../services/authService";
-import { useNavigate } from "react-router-dom";
 
 function Login() {
     const navigate = useNavigate();
@@ -37,22 +37,17 @@ function Login() {
                 JSON.stringify(data.user)
             );
 
-            console.log("Logged in successfully");
-            console.log(data);
-
-            alert("Login successful!");
-            console.log("About to go navigation")
             if (data.user.role === "admin") {
-                window.location.href = "/admin";
+                navigate("/admin");
             } else {
-                window.location.href = "/";
-}
+                navigate("/");
+            }
 
         } catch (error) {
 
-            console.error(error);
-
-            alert("Login failed");
+            alert(
+                error.response?.data?.message || "Login failed. Check your credentials."
+            );
 
         }
     };
@@ -63,10 +58,10 @@ function Login() {
 
             <div className="auth-card">
 
-                <h1>Staff Login</h1>
+                <h1>Login</h1>
 
                 <p className="auth-subtitle">
-                    Sign in to access the dealership dashboard
+                    Sign in to your account
                 </p>
 
                 <form onSubmit={handleSubmit}>
@@ -106,6 +101,13 @@ function Login() {
                     </button>
 
                 </form>
+
+                <p className="auth-footer">
+                    Don&apos;t have an account?{" "}
+                    <Link to="/register" className="auth-link">
+                        Register
+                    </Link>
+                </p>
 
             </div>
 
