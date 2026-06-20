@@ -885,3 +885,52 @@ body {
     font-size: 1rem;
     padding: 40px 0;
 }
+
+/* ── Car card edit state ── */
+.admin-item-card--editing {
+    border: 2px solid #2563eb;
+}
+
+.editing-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #2563eb;
+    margin-bottom: 14px;
+}
+
+.edit-form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.edit-form-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.admin-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.admin-edit-btn {
+    flex: 1;
+    padding: 7px 0;
+    background: #111827;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.admin-edit-btn:hover {
+    background: #2563eb;
+}

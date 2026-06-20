@@ -25,6 +25,10 @@ function AdminDashboard() {
     const [formSuccess, setFormSuccess] = useState("");
     const [formError, setFormError]     = useState("");
 
+    const [editingCarId, setEditingCarId]   = useState(null);
+    const [editFormData, setEditFormData]   = useState({});
+    const [editError, setEditError]         = useState("");
+
     const [formData, setFormData] = useState({
         title: "",
         brand: "",
@@ -89,6 +93,38 @@ function AdminDashboard() {
             fetchCars();
         } catch {
             setFormError("Failed to add car. Please try again.");
+        }
+    };
+
+    const startEdit = (car) => {
+        setEditingCarId(car._id);
+        setEditFormData({
+            title:     car.title,
+            brand:     car.brand,
+            year:      car.year,
+            price:     car.price,
+            condition: car.condition,
+        });
+        setEditError("");
+    };
+
+    const handleEditChange = (e) => {
+        setEditFormData({ ...editFormData, [e.target.name]: e.target.value });
+        setEditError("");
+    };
+
+    const saveEdit = async (e, id) => {
+        e.preventDefault();
+        try {
+            await axios.put(
+                `http://localhost:3000/api/cars/${id}`,
+                editFormData,
+                { headers: { Authorization: `Bearer ${token()}` } }
+            );
+            setEditingCarId(null);
+            fetchCars();
+        } catch {
+            setEditError("Failed to save changes. Please try again.");
         }
     };
 
@@ -282,25 +318,119 @@ function AdminDashboard() {
                             <p className="admin-empty">No cars listed yet.</p>
                         ) : (
                             <div className="admin-cards-grid">
-                                {cars.map((car) => (
-                                    <div key={car._id} className="admin-item-card">
-                                        <div className="admin-item-card-header">
-                                            <h3>{car.title}</h3>
-                                            <span className={`condition-badge ${car.condition}`}>
-                                                {car.condition === "new" ? "New" : "Used"}
-                                            </span>
+                                {cars.map((car) =>
+                                    editingCarId === car._id ? (
+                                        /* ── Edit form ── */
+                                        <div key={car._id} className="admin-item-card admin-item-card--editing">
+                                            <p className="editing-label">Editing car</p>
+                                            {editError && (
+                                                <p className="admin-error" style={{ marginBottom: "12px" }}>
+                                                    {editError}
+                                                </p>
+                                            )}
+                                            <form onSubmit={(e) => saveEdit(e, car._id)}>
+                                                <div className="edit-form-fields">
+                                                    <div className="form-group">
+                                                        <label className="form-label">Title</label>
+                                                        <input
+                                                            className="form-input"
+                                                            type="text"
+                                                            name="title"
+                                                            value={editFormData.title}
+                                                            onChange={handleEditChange}
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label className="form-label">Brand</label>
+                                                        <input
+                                                            className="form-input"
+                                                            type="text"
+                                                            name="brand"
+                                                            value={editFormData.brand}
+                                                            onChange={handleEditChange}
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label className="form-label">Year</label>
+                                                        <input
+                                                            className="form-input"
+                                                            type="number"
+                                                            name="year"
+                                                            value={editFormData.year}
+                                                            onChange={handleEditChange}
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label className="form-label">Price (TZS)</label>
+                                                        <input
+                                                            className="form-input"
+                                                            type="number"
+                                                            name="price"
+                                                            value={editFormData.price}
+                                                            onChange={handleEditChange}
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label className="form-label">Condition</label>
+                                                        <select
+                                                            className="form-input"
+                                                            name="condition"
+                                                            value={editFormData.condition}
+                                                            onChange={handleEditChange}
+                                                            required
+                                                        >
+                                                            <option value="new">New</option>
+                                                            <option value="used">Used</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="edit-form-actions">
+                                                    <button className="form-submit-btn" type="submit">
+                                                        Save
+                                                    </button>
+                                                    <button
+                                                        className="admin-delete-btn"
+                                                        type="button"
+                                                        onClick={() => setEditingCarId(null)}
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </form>
                                         </div>
-                                        <p><strong>Brand:</strong> {car.brand}</p>
-                                        <p><strong>Year:</strong> {car.year}</p>
-                                        <p><strong>Price:</strong> TZS {car.price.toLocaleString()}</p>
-                                        <button
-                                            className="admin-delete-btn"
-                                            onClick={() => deleteCar(car._id)}
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                ))}
+                                    ) : (
+                                        /* ── Display card ── */
+                                        <div key={car._id} className="admin-item-card">
+                                            <div className="admin-item-card-header">
+                                                <h3>{car.title}</h3>
+                                                <span className={`condition-badge ${car.condition}`}>
+                                                    {car.condition === "new" ? "New" : "Used"}
+                                                </span>
+                                            </div>
+                                            <p><strong>Brand:</strong> {car.brand}</p>
+                                            <p><strong>Year:</strong> {car.year}</p>
+                                            <p><strong>Price:</strong> TZS {car.price.toLocaleString()}</p>
+                                            <div className="admin-card-actions">
+                                                <button
+                                                    className="admin-edit-btn"
+                                                    onClick={() => startEdit(car)}
+                                                >
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    className="admin-delete-btn"
+                                                    onClick={() => deleteCar(car._id)}
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )
+                                )}
                             </div>
                         )}
                     </div>
