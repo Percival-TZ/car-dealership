@@ -5,6 +5,12 @@ const createBooking = async (req, res) => {
     try {
         const { carId, date, notes } = req.body;
 
+        if (new Date(date) <= new Date()) {
+            return res.status(400).json({
+                message: "Order date must be in the future"
+            });
+        }
+
         const booking = await Booking.create({
             user: req.user.id,
             car: carId,

@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { loginUser } from "../services/authService";
 
 function Login() {
-    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         email: "",
@@ -38,9 +37,9 @@ function Login() {
             );
 
             if (data.user.role === "admin") {
-                navigate("/admin");
+                window.location.href = "/admin";
             } else {
-                navigate("/");
+                window.location.href = "/";
             }
 
         } catch (error) {

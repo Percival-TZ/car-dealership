@@ -166,6 +166,7 @@ function CarDetails() {
                                         type="datetime-local"
                                         value={orderDate}
                                         onChange={(e) => setOrderDate(e.target.value)}
+                                        min={new Date().toISOString().slice(0, 16)}
                                         required
                                     />
 

@@ -203,6 +203,19 @@ function AdminDashboard() {
                         </button>
                     ))}
                 </nav>
+
+                <div className="sidebar-footer">
+                    <button
+                        className="sidebar-logout-btn"
+                        onClick={() => {
+                            localStorage.removeItem("token");
+                            localStorage.removeItem("user");
+                            window.location.href = "/";
+                        }}
+                    >
+                        Logout
+                    </button>
+                </div>
             </aside>
 
             {/* Top bar */}

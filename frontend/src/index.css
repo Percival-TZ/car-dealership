@@ -934,3 +934,28 @@ body {
 .admin-edit-btn:hover {
     background: #2563eb;
 }
+
+/* ── Sidebar footer / logout ── */
+.sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid #374151;
+    margin-top: auto;
+}
+
+.sidebar-logout-btn {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    color: #f87171;
+    border: 1px solid #f87171;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-logout-btn:hover {
+    background: #f87171;
+    color: white;
+}
