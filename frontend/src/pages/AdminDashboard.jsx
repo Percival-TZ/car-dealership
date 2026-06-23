@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 
 const NAV_ITEMS = [
@@ -16,8 +17,9 @@ const SECTION_TITLES = {
 };
 
 function AdminDashboard() {
+    const [searchParams, setSearchParams] = useSearchParams();
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [activeSection, setActiveSection] = useState("add-car");
+    const activeSection = searchParams.get("section") || "add-car";
 
     const [cars, setCars]         = useState([]);
     const [users, setUsers]       = useState([]);
@@ -25,9 +27,11 @@ function AdminDashboard() {
     const [formSuccess, setFormSuccess] = useState("");
     const [formError, setFormError]     = useState("");
 
-    const [editingCarId, setEditingCarId]   = useState(null);
-    const [editFormData, setEditFormData]   = useState({});
-    const [editError, setEditError]         = useState("");
+    const [editingCarId, setEditingCarId]       = useState(null);
+    const [editFormData, setEditFormData]       = useState({});
+    const [editError, setEditError]             = useState("");
+    const [editImageFiles, setEditImageFiles]   = useState([]);
+    const [editImagePreviews, setEditImagePreviews] = useState([]);
 
     const [formData, setFormData] = useState({
         title: "",
@@ -36,6 +40,8 @@ function AdminDashboard() {
         price: "",
         condition: "",
     });
+    const [imageFiles, setImageFiles] = useState([]);
+    const [imagePreviews, setImagePreviews] = useState([]);
 
     useEffect(() => {
         fetchCars();
@@ -82,17 +88,37 @@ function AdminDashboard() {
         setFormError("");
     };
 
+    const handleImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        setImageFiles(files);
+        setImagePreviews(files.map((f) => URL.createObjectURL(f)));
+    };
+
     const createCar = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("http://localhost:3000/api/cars/add", formData, {
-                headers: { Authorization: `Bearer ${token()}` },
+            const data = new FormData();
+            data.append("title", formData.title);
+            data.append("brand", formData.brand);
+            data.append("year", formData.year);
+            data.append("price", formData.price);
+            data.append("condition", formData.condition);
+            imageFiles.forEach((file) => data.append("images", file));
+
+            await axios.post("http://localhost:3000/api/cars/add", data, {
+                headers: {
+                    Authorization: `Bearer ${token()}`,
+                },
             });
             setFormSuccess("Car added successfully!");
             setFormData({ title: "", brand: "", year: "", price: "", condition: "" });
+            setImageFiles([]);
+            setImagePreviews([]);
             fetchCars();
-        } catch {
-            setFormError("Failed to add car. Please try again.");
+        } catch (err) {
+            setFormError(
+                err.response?.data?.message || "Failed to add car. Please try again."
+            );
         }
     };
 
@@ -105,6 +131,12 @@ function AdminDashboard() {
             price:     car.price,
             condition: car.condition,
         });
+        setEditImageFiles([]);
+        setEditImagePreviews(
+            car.images && car.images.length > 0
+                ? car.images.map((img) => `http://localhost:3000/${img}`)
+                : []
+        );
         setEditError("");
     };
 
@@ -113,13 +145,31 @@ function AdminDashboard() {
         setEditError("");
     };
 
+    const handleEditImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        setEditImageFiles(files);
+        setEditImagePreviews(files.map((f) => URL.createObjectURL(f)));
+    };
+
     const saveEdit = async (e, id) => {
         e.preventDefault();
         try {
+            const data = new FormData();
+            data.append("title", editFormData.title);
+            data.append("brand", editFormData.brand);
+            data.append("year", editFormData.year);
+            data.append("price", editFormData.price);
+            data.append("condition", editFormData.condition);
+            editImageFiles.forEach((file) => data.append("images", file));
+
             await axios.put(
                 `http://localhost:3000/api/cars/${id}`,
-                editFormData,
-                { headers: { Authorization: `Bearer ${token()}` } }
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token()}`,
+                    },
+                }
             );
             setEditingCarId(null);
             fetchCars();
@@ -165,7 +215,7 @@ function AdminDashboard() {
     };
 
     const navigate = (section) => {
-        setActiveSection(section);
+        setSearchParams({ section });
         setSidebarOpen(false);
     };
 
@@ -315,7 +365,31 @@ function AdminDashboard() {
                                         <option value="used">Used</option>
                                     </select>
                                 </div>
+
+                                <div className="form-group form-group-full">
+                                    <label className="form-label">Car Images</label>
+                                    <input
+                                        className="form-input"
+                                        type="file"
+                                        accept="image/*"
+                                        multiple
+                                        onChange={handleImageChange}
+                                    />
+                                </div>
                             </div>
+
+                            {imagePreviews.length > 0 && (
+                                <div className="image-preview-row">
+                                    {imagePreviews.map((src, i) => (
+                                        <img
+                                            key={i}
+                                            src={src}
+                                            alt={`Preview ${i + 1}`}
+                                            className="image-preview-thumb"
+                                        />
+                                    ))}
+                                </div>
+                            )}
 
                             <button className="form-submit-btn" type="submit">
                                 Add Car
@@ -400,7 +474,31 @@ function AdminDashboard() {
                                                             <option value="used">Used</option>
                                                         </select>
                                                     </div>
+                                                    <div className="form-group">
+                                                        <label className="form-label">
+                                                            Replace Images
+                                                        </label>
+                                                        <input
+                                                            className="form-input"
+                                                            type="file"
+                                                            accept="image/*"
+                                                            multiple
+                                                            onChange={handleEditImageChange}
+                                                        />
+                                                    </div>
                                                 </div>
+                                                {editImagePreviews.length > 0 && (
+                                                    <div className="image-preview-row">
+                                                        {editImagePreviews.map((src, i) => (
+                                                            <img
+                                                                key={i}
+                                                                src={src}
+                                                                alt={`Preview ${i + 1}`}
+                                                                className="image-preview-thumb"
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                )}
                                                 <div className="edit-form-actions">
                                                     <button className="form-submit-btn" type="submit">
                                                         Save
@@ -418,6 +516,13 @@ function AdminDashboard() {
                                     ) : (
                                         /* ── Display card ── */
                                         <div key={car._id} className="admin-item-card">
+                                            {car.images && car.images.length > 0 && (
+                                                <img
+                                                    src={`http://localhost:3000/${car.images[0]}`}
+                                                    alt={car.title}
+                                                    className="admin-car-img"
+                                                />
+                                            )}
                                             <div className="admin-item-card-header">
                                                 <h3>{car.title}</h3>
                                                 <span className={`condition-badge ${car.condition}`}>

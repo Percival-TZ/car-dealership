@@ -3,6 +3,13 @@ import { Link } from "react-router-dom";
 function CarCard({ car }) {
     return (
         <div className="car-card">
+            {car.images && car.images.length > 0 && (
+                <img
+                    src={`http://localhost:3000/${car.images[0]}`}
+                    alt={car.title}
+                    className="car-card-img"
+                />
+            )}
             <div className="car-card-header">
                 <h2>{car.title}</h2>
                 <span className={`condition-badge ${car.condition}`}>

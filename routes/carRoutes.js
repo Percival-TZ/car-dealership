@@ -25,12 +25,12 @@ router.post(
     "/add",
     protect,
     adminOnly,
-   
+    upload.array("images", 5),
     addCar
 );
 
 // update car (admin only)
-router.put("/:id", protect, adminOnly, updateCar);
+router.put("/:id", protect, adminOnly, upload.array("images", 5), updateCar);
 
 // delete car (admin only)
 router.delete("/:id", protect, adminOnly, deleteCar);

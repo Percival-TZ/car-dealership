@@ -6,7 +6,12 @@
       "Bash(echo \"Frontend PID: $!\")",
       "Bash(lsof -ti:3000)",
       "Bash(xargs kill -9)",
-      "Bash(lsof -ti:5173)"
+      "Bash(lsof -ti:5173)",
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"ellylous093@gmail.com\",\"password\":\"admin123\"}')",
+      "Bash(node -e ' *)",
+      "Bash(curl -s -X POST http://localhost:3001/test-add -F 'title=Test Car' -F brand=Toyota -F year=2024 -F price=5000000 -F condition=new -F 'images=@/home/percival/Desktop/github/car-dealership/images/toyota supra.jpeg')",
+      "Bash(lsof -ti:3001)",
+      "Bash(echo \"PID: $!\")"
     ]
   }
 }

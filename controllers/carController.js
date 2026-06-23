@@ -91,9 +91,14 @@ const getCarById = async (req, res) => {
 // UPDATE
 const updateCar = async (req, res) => {
     try {
+        const updateData = { ...req.body };
+        if (req.files && req.files.length > 0) {
+            updateData.images = req.files.map(file => file.path);
+        }
+
         const car = await Car.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            updateData,
             { new: true, runValidators: true }
         );
 
