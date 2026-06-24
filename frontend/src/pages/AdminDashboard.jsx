@@ -189,7 +189,6 @@ function AdminDashboard() {
             alert("Failed to delete car.");
         }
     };
-
     const cancelBooking = async (id) => {
         if (!window.confirm("Cancel this order?")) return;
         try {
@@ -201,7 +200,6 @@ function AdminDashboard() {
             alert("Failed to cancel order.");
         }
     };
-
     const clearBookings = async () => {
         if (!window.confirm("Clear ALL orders? This cannot be undone.")) return;
         try {
@@ -229,44 +227,40 @@ function AdminDashboard() {
                     onClick={() => setSidebarOpen(false)}
                 />
             )}
-
-            {/* Sidebar */}
-            <aside className={`admin-sidebar ${sidebarOpen ? "open" : ""}`}>
-                <div className="sidebar-header">
-                    <span className="sidebar-title">Admin Panel</span>
-                    <button
-                        className="sidebar-close-btn"
-                        onClick={() => setSidebarOpen(false)}
-                    >
-                        &#10005;
-                    </button>
-                </div>
-
-                <nav className="sidebar-nav">
-                    {NAV_ITEMS.map((item) => (
-                        <button
-                            key={item.key}
-                            className={`sidebar-nav-item ${activeSection === item.key ? "active" : ""}`}
-                            onClick={() => navigate(item.key)}
-                        >
-                            {item.label}
-                        </button>
-                    ))}
-                </nav>
-
-                <div className="sidebar-footer">
-                    <button
-                        className="sidebar-logout-btn"
-                        onClick={() => {
-                            localStorage.removeItem("token");
-                            localStorage.removeItem("user");
-                            window.location.href = "/";
-                        }}
-                    >
-                        Logout
-                    </button>
-                </div>
-            </aside>
+{/* Sidebar */}
+<aside className={`admin-sidebar ${sidebarOpen ? "open" : ""}`}>
+<div className="sidebar-header">
+<span className="sidebar-title">Admin Panel</span>
+<button
+className="sidebar-close-btn"
+onClick={() => setSidebarOpen(false)}
+>&#10005;
+</button>
+</div>
+<nav className="sidebar-nav">
+{NAV_ITEMS.map((item) => (
+<button
+key={item.key}
+className={`sidebar-nav-item ${activeSection === item.key ? "active" : ""}`}
+onClick={() => navigate(item.key)}
+>
+{item.label}
+</button>
+))}
+</nav>
+<div className="sidebar-footer">
+ <button
+className="sidebar-logout-btn"
+onClick={() => {
+localStorage.removeItem("token");
+localStorage.removeItem("user");
+window.location.href = "/";
+}}
+>
+Logout
+</button>
+</div>
+</aside>
 
             {/* Top bar */}
             <div className="admin-topbar">
