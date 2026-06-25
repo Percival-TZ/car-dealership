@@ -17,7 +17,14 @@ connectDB();
 const app = express();
 
 app.use(cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: function (origin, callback) {
+        const allowed = process.env.CLIENT_URL || "http://localhost:5173";
+        if (!origin || origin === allowed || origin.endsWith(".vercel.app")) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
 }));
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
