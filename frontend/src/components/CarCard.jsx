@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
+import { getImageUrl } from "../services/Api";
 
 function CarCard({ car }) {
     return (
         <div className="car-card">
             {car.images && car.images.length > 0 && (
                 <img
-                    src={`http://localhost:3000/${car.images[0]}`}
+                    src={getImageUrl(car.images[0])}
                     alt={car.title}
                     className="car-card-img"
                 />
@@ -20,6 +21,12 @@ function CarCard({ car }) {
             <p><strong>Brand:</strong> {car.brand}</p>
             <p><strong>Year:</strong> {car.year}</p>
             <p><strong>Price:</strong> TZS {car.price.toLocaleString()}</p>
+            <p>
+                <strong>In Stock:</strong>{" "}
+                <span className={car.quantity > 0 ? "stock-in" : "stock-out"}>
+                    {car.quantity > 0 ? `${car.quantity} available` : "Out of stock"}
+                </span>
+            </p>
 
             <Link to={`/cars/${car._id}`} className="view-details-btn">
                 View Details &amp; Order

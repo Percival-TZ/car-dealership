@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import api from "../services/Api";
 
 function MyOrders() {
     const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const token = localStorage.getItem("token");
-
     useEffect(() => {
-        if (!token) {
+        if (!localStorage.getItem("token")) {
             navigate("/login");
             return;
         }
@@ -19,10 +17,7 @@ function MyOrders() {
 
     const fetchOrders = async () => {
         try {
-            const res = await axios.get(
-                "http://localhost:3000/api/bookings/my",
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            const res = await api.get("/bookings/my");
             setOrders(res.data);
         } catch {
             setOrders([]);
@@ -34,10 +29,7 @@ function MyOrders() {
     const cancelOrder = async (id) => {
         if (!window.confirm("Cancel this order?")) return;
         try {
-            await axios.delete(
-                `http://localhost:3000/api/bookings/${id}`,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            await api.delete(`/bookings/${id}`);
             setOrders(orders.filter((o) => o._id !== id));
         } catch {
             alert("Failed to cancel order.");

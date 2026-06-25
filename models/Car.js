@@ -32,6 +32,13 @@ const carSchema = new mongoose.Schema(
         required: true
     },
 
+    quantity: {
+        type: Number,
+        required: true,
+        min: 0,
+        default: 1
+    },
+
     images: {
         type: [String],
         default: []

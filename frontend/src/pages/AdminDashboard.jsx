@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import axios from "axios";
+import api, { getImageUrl } from "../services/Api";
 
 const NAV_ITEMS = [
     { key: "add-car",  label: "Add Car"  },
@@ -39,6 +39,7 @@ function AdminDashboard() {
         year: "",
         price: "",
         condition: "",
+        quantity: "",
     });
     const [imageFiles, setImageFiles] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
@@ -49,11 +50,9 @@ function AdminDashboard() {
         fetchBookings();
     }, []);
 
-    const token = () => localStorage.getItem("token");
-
     const fetchCars = async () => {
         try {
-            const res = await axios.get("http://localhost:3000/api/cars");
+            const res = await api.get("/cars");
             setCars(res.data.cars);
         } catch (e) {
             console.error(e);
@@ -62,9 +61,7 @@ function AdminDashboard() {
 
     const fetchUsers = async () => {
         try {
-            const res = await axios.get("http://localhost:3000/api/admin/users", {
-                headers: { Authorization: `Bearer ${token()}` },
-            });
+            const res = await api.get("/admin/users");
             setUsers(res.data);
         } catch (e) {
             console.error(e);
@@ -73,9 +70,7 @@ function AdminDashboard() {
 
     const fetchBookings = async () => {
         try {
-            const res = await axios.get("http://localhost:3000/api/admin/bookings", {
-                headers: { Authorization: `Bearer ${token()}` },
-            });
+            const res = await api.get("/admin/bookings");
             setBookings(res.data);
         } catch (e) {
             console.error(e);
@@ -103,15 +98,12 @@ function AdminDashboard() {
             data.append("year", formData.year);
             data.append("price", formData.price);
             data.append("condition", formData.condition);
+            data.append("quantity", formData.quantity);
             imageFiles.forEach((file) => data.append("images", file));
 
-            await axios.post("http://localhost:3000/api/cars/add", data, {
-                headers: {
-                    Authorization: `Bearer ${token()}`,
-                },
-            });
+            await api.post("/cars/add", data);
             setFormSuccess("Car added successfully!");
-            setFormData({ title: "", brand: "", year: "", price: "", condition: "" });
+            setFormData({ title: "", brand: "", year: "", price: "", condition: "", quantity: "" });
             setImageFiles([]);
             setImagePreviews([]);
             fetchCars();
@@ -130,11 +122,12 @@ function AdminDashboard() {
             year:      car.year,
             price:     car.price,
             condition: car.condition,
+            quantity:  car.quantity,
         });
         setEditImageFiles([]);
         setEditImagePreviews(
             car.images && car.images.length > 0
-                ? car.images.map((img) => `http://localhost:3000/${img}`)
+                ? car.images.map((img) => getImageUrl(img))
                 : []
         );
         setEditError("");
@@ -160,17 +153,10 @@ function AdminDashboard() {
             data.append("year", editFormData.year);
             data.append("price", editFormData.price);
             data.append("condition", editFormData.condition);
+            data.append("quantity", editFormData.quantity);
             editImageFiles.forEach((file) => data.append("images", file));
 
-            await axios.put(
-                `http://localhost:3000/api/cars/${id}`,
-                data,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token()}`,
-                    },
-                }
-            );
+            await api.put(`/cars/${id}`, data);
             setEditingCarId(null);
             fetchCars();
         } catch {
@@ -181,9 +167,7 @@ function AdminDashboard() {
     const deleteCar = async (id) => {
         if (!window.confirm("Delete this car?")) return;
         try {
-            await axios.delete(`http://localhost:3000/api/cars/${id}`, {
-                headers: { Authorization: `Bearer ${token()}` },
-            });
+            await api.delete(`/cars/${id}`);
             setCars(cars.filter((c) => c._id !== id));
         } catch {
             alert("Failed to delete car.");
@@ -192,9 +176,7 @@ function AdminDashboard() {
     const cancelBooking = async (id) => {
         if (!window.confirm("Cancel this order?")) return;
         try {
-            await axios.delete(`http://localhost:3000/api/admin/bookings/${id}`, {
-                headers: { Authorization: `Bearer ${token()}` },
-            });
+            await api.delete(`/admin/bookings/${id}`);
             setBookings(bookings.filter((b) => b._id !== id));
         } catch {
             alert("Failed to cancel order.");
@@ -203,9 +185,7 @@ function AdminDashboard() {
     const clearBookings = async () => {
         if (!window.confirm("Clear ALL orders? This cannot be undone.")) return;
         try {
-            await axios.delete("http://localhost:3000/api/admin/bookings", {
-                headers: { Authorization: `Bearer ${token()}` },
-            });
+            await api.delete("/admin/bookings");
             setBookings([]);
         } catch {
             alert("Failed to clear orders.");
@@ -360,6 +340,20 @@ Logout
                                     </select>
                                 </div>
 
+                                <div className="form-group">
+                                    <label className="form-label">Quantity Available</label>
+                                    <input
+                                        className="form-input"
+                                        type="number"
+                                        name="quantity"
+                                        placeholder="e.g. 3"
+                                        value={formData.quantity}
+                                        onChange={handleChange}
+                                        min="0"
+                                        required
+                                    />
+                                </div>
+
                                 <div className="form-group form-group-full">
                                     <label className="form-label">Car Images</label>
                                     <input
@@ -469,6 +463,18 @@ Logout
                                                         </select>
                                                     </div>
                                                     <div className="form-group">
+                                                        <label className="form-label">Quantity</label>
+                                                        <input
+                                                            className="form-input"
+                                                            type="number"
+                                                            name="quantity"
+                                                            value={editFormData.quantity}
+                                                            onChange={handleEditChange}
+                                                            min="0"
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div className="form-group">
                                                         <label className="form-label">
                                                             Replace Images
                                                         </label>
@@ -512,7 +518,7 @@ Logout
                                         <div key={car._id} className="admin-item-card">
                                             {car.images && car.images.length > 0 && (
                                                 <img
-                                                    src={`http://localhost:3000/${car.images[0]}`}
+                                                    src={getImageUrl(car.images[0])}
                                                     alt={car.title}
                                                     className="admin-car-img"
                                                 />
@@ -526,6 +532,12 @@ Logout
                                             <p><strong>Brand:</strong> {car.brand}</p>
                                             <p><strong>Year:</strong> {car.year}</p>
                                             <p><strong>Price:</strong> TZS {car.price.toLocaleString()}</p>
+                                            <p>
+                                                <strong>In Stock:</strong>{" "}
+                                                <span className={car.quantity > 0 ? "stock-in" : "stock-out"}>
+                                                    {car.quantity > 0 ? `${car.quantity} available` : "Out of stock"}
+                                                </span>
+                                            </p>
                                             <div className="admin-card-actions">
                                                 <button
                                                     className="admin-edit-btn"

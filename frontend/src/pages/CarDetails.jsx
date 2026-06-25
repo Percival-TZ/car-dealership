@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import api, { getImageUrl } from "../services/Api";
 
 function CarDetails() {
     const { id } = useParams();
@@ -13,15 +13,12 @@ function CarDetails() {
     const [favoriteMsg, setFavoriteMsg] = useState("");
     const [orderMsg, setOrderMsg] = useState("");
 
-    const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("user") || "null");
 
     useEffect(() => {
         const fetchCar = async () => {
             try {
-                const res = await axios.get(
-                    `http://localhost:3000/api/cars/${id}`
-                );
+                const res = await api.get(`/cars/${id}`);
                 setCar(res.data);
             } catch {
                 setCar(null);
@@ -33,16 +30,8 @@ function CarDetails() {
     }, [id]);
 
     const handleAddFavorite = async () => {
-        if (!token) {
-            navigate("/login");
-            return;
-        }
         try {
-            await axios.post(
-                `http://localhost:3000/api/users/favorites/${id}`,
-                {},
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            await api.post(`/users/favorites/${id}`);
             setFavoriteMsg("Added to favorites!");
         } catch (err) {
             setFavoriteMsg(
@@ -53,16 +42,8 @@ function CarDetails() {
 
     const handleOrder = async (e) => {
         e.preventDefault();
-        if (!token) {
-            navigate("/login");
-            return;
-        }
         try {
-            await axios.post(
-                "http://localhost:3000/api/bookings",
-                { carId: id, date: orderDate, notes },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            await api.post("/bookings", { carId: id, date: orderDate, notes });
             setOrderMsg("Order placed successfully!");
             setOrderDate("");
             setNotes("");
@@ -86,7 +67,7 @@ function CarDetails() {
                         {car.images.map((img, i) => (
                             <img
                                 key={i}
-                                src={`http://localhost:3000/${img}`}
+                                src={getImageUrl(img)}
                                 alt={car.title}
                                 className="car-detail-img"
                             />
@@ -120,6 +101,12 @@ function CarDetails() {
                             <span className="detail-label">Price</span>
                             <span className="detail-value price-tag">
                                 TZS {car.price.toLocaleString()}
+                            </span>
+                        </div>
+                        <div className="detail-item">
+                            <span className="detail-label">Availability</span>
+                            <span className={`detail-value ${car.quantity > 0 ? "stock-in" : "stock-out"}`}>
+                                {car.quantity > 0 ? `${car.quantity} in stock` : "Out of stock"}
                             </span>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../services/Api";
 
 import CarCard from "../components/CarCard";
 
@@ -14,9 +14,7 @@ function Home() {
 
             try {
 
-                const response = await axios.get(
-                    "http://localhost:3000/api/cars"
-                );
+                const response = await api.get("/cars");
 
                 setCars(response.data.cars);
 

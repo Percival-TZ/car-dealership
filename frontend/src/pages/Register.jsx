@@ -76,9 +76,10 @@ function Register() {
                         className="auth-input"
                         type="password"
                         name="password"
-                        placeholder="Create a password"
+                        placeholder="Min 6 characters"
                         value={formData.password}
                         onChange={handleChange}
+                        minLength={6}
                         required
                     />
 

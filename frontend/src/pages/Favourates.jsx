@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import api, { getImageUrl } from "../services/Api";
 
 function Favorites() {
     const navigate = useNavigate();
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const token = localStorage.getItem("token");
-
     useEffect(() => {
-        if (!token) {
+        if (!localStorage.getItem("token")) {
             navigate("/login");
             return;
         }
@@ -19,10 +17,7 @@ function Favorites() {
 
     const fetchFavorites = async () => {
         try {
-            const res = await axios.get(
-                "http://localhost:3000/api/users/favorites",
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            const res = await api.get("/users/favorites");
             setFavorites(res.data);
         } catch {
             setFavorites([]);
@@ -33,10 +28,7 @@ function Favorites() {
 
     const removeFavorite = async (carId) => {
         try {
-            await axios.delete(
-                `http://localhost:3000/api/users/favorites/${carId}`,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            await api.delete(`/users/favorites/${carId}`);
             setFavorites(favorites.filter((car) => car._id !== carId));
         } catch {
             alert("Failed to remove from favorites.");
@@ -58,6 +50,13 @@ function Favorites() {
                 <div className="car-grid">
                     {favorites.map((car) => (
                         <div key={car._id} className="car-card">
+                            {car.images && car.images.length > 0 && (
+                                <img
+                                    src={getImageUrl(car.images[0])}
+                                    alt={car.title}
+                                    className="car-card-img"
+                                />
+                            )}
                             <h2>{car.title}</h2>
                             <span className={`condition-badge ${car.condition}`}>
                                 {car.condition === "new" ? "New" : "Used"}
@@ -67,10 +66,7 @@ function Favorites() {
                             <p><strong>Price:</strong> TZS {car.price.toLocaleString()}</p>
 
                             <div className="card-actions">
-                                <Link
-                                    to={`/cars/${car._id}`}
-                                    className="view-btn"
-                                >
+                                <Link to={`/cars/${car._id}`} className="view-btn">
                                     View Details
                                 </Link>
                                 <button

@@ -943,6 +943,17 @@ body {
     background: #2563eb;
 }
 
+/* ── Stock availability ── */
+.stock-in {
+    color: #065f46;
+    font-weight: 600;
+}
+
+.stock-out {
+    color: #dc2626;
+    font-weight: 600;
+}
+
 /* ── Image upload ── */
 .form-group-full {
     grid-column: 1 / -1;
