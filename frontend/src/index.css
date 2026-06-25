@@ -943,6 +943,23 @@ body {
     background: #2563eb;
 }
 
+.admin-confirm-btn {
+    flex: 1;
+    padding: 7px 0;
+    background: #065f46;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.admin-confirm-btn:hover {
+    background: #059669;
+}
+
 /* ── Stock availability ── */
 .stock-in {
     color: #065f46;

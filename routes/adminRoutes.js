@@ -4,6 +4,7 @@ const {
     getDashboardStats,
     getUsers,
     getBookings,
+    confirmBooking,
     cancelBooking,
     clearBookings
 } = require("../controllers/adminController");
@@ -34,6 +35,13 @@ router.get(
     protect,
     adminOnly,
     getBookings
+);
+
+router.put(
+    "/bookings/:id/confirm",
+    protect,
+    adminOnly,
+    confirmBooking
 );
 
 router.delete(

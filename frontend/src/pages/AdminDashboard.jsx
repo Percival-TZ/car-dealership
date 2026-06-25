@@ -3,10 +3,11 @@ import { useSearchParams } from "react-router-dom";
 import api, { getImageUrl } from "../services/Api";
 
 const NAV_ITEMS = [
-    { key: "add-car",  label: "Add Car"  },
-    { key: "cars",     label: "Cars"     },
-    { key: "users",    label: "Users"    },
-    { key: "bookings", label: "Bookings" },
+    { key: "add-car",   label: "Add Car"    },
+    { key: "cars",      label: "Cars"       },
+    { key: "users",     label: "Users"      },
+    { key: "bookings",  label: "Bookings"   },
+    { key: "settings",  label: "Settings"   },
 ];
 
 const SECTION_TITLES = {
@@ -14,6 +15,7 @@ const SECTION_TITLES = {
     "cars":     "Available Cars",
     "users":    "Registered Users",
     "bookings": "Orders / Bookings",
+    "settings": "Account Settings",
 };
 
 function AdminDashboard() {
@@ -43,6 +45,9 @@ function AdminDashboard() {
     });
     const [imageFiles, setImageFiles] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
+
+    const [passwordData, setPasswordData] = useState({ currentPassword: "", newPassword: "" });
+    const [passwordMsg, setPasswordMsg] = useState({ text: "", ok: false });
 
     useEffect(() => {
         fetchCars();
@@ -182,6 +187,17 @@ function AdminDashboard() {
             alert("Failed to cancel order.");
         }
     };
+    const confirmBooking = async (id) => {
+        try {
+            await api.put(`/admin/bookings/${id}/confirm`);
+            setBookings(bookings.map((b) =>
+                b._id === id ? { ...b, status: "confirmed" } : b
+            ));
+        } catch {
+            alert("Failed to confirm order.");
+        }
+    };
+
     const clearBookings = async () => {
         if (!window.confirm("Clear ALL orders? This cannot be undone.")) return;
         try {
@@ -189,6 +205,20 @@ function AdminDashboard() {
             setBookings([]);
         } catch {
             alert("Failed to clear orders.");
+        }
+    };
+
+    const handlePasswordChange = async (e) => {
+        e.preventDefault();
+        try {
+            await api.put("/users/change-password", passwordData);
+            setPasswordMsg({ text: "Password changed successfully!", ok: true });
+            setPasswordData({ currentPassword: "", newPassword: "" });
+        } catch (err) {
+            setPasswordMsg({
+                text: err.response?.data?.message || "Failed to change password.",
+                ok: false,
+            });
         }
     };
 
@@ -625,18 +655,74 @@ Logout
                                                     <strong>Notes:</strong> {booking.notes}
                                                 </p>
                                             )}
-                                            <button
-                                                className="remove-btn"
-                                                style={{ marginTop: "12px", maxWidth: "140px" }}
-                                                onClick={() => cancelBooking(booking._id)}
-                                            >
-                                                Cancel Order
-                                            </button>
+                                            <div className="admin-card-actions" style={{ marginTop: "12px" }}>
+                                                {booking.status === "pending" && (
+                                                    <button
+                                                        className="admin-confirm-btn"
+                                                        onClick={() => confirmBooking(booking._id)}
+                                                    >
+                                                        Confirm
+                                                    </button>
+                                                )}
+                                                <button
+                                                    className="admin-delete-btn"
+                                                    onClick={() => cancelBooking(booking._id)}
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
                             </>
                         )}
+                    </div>
+                )}
+
+                {/* ── SETTINGS ── */}
+                {activeSection === "settings" && (
+                    <div className="admin-card">
+                        <h2 style={{ marginBottom: "20px" }}>Change Password</h2>
+
+                        {passwordMsg.text && (
+                            <p className={passwordMsg.ok ? "admin-success" : "admin-error"}>
+                                {passwordMsg.text}
+                            </p>
+                        )}
+
+                        <form onSubmit={handlePasswordChange} className="admin-form">
+                            <div className="edit-form-fields">
+                                <div className="form-group">
+                                    <label className="form-label">Current Password</label>
+                                    <input
+                                        className="form-input"
+                                        type="password"
+                                        value={passwordData.currentPassword}
+                                        onChange={(e) =>
+                                            setPasswordData({ ...passwordData, currentPassword: e.target.value })
+                                        }
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">New Password</label>
+                                    <input
+                                        className="form-input"
+                                        type="password"
+                                        placeholder="Min 6 characters"
+                                        minLength={6}
+                                        value={passwordData.newPassword}
+                                        onChange={(e) =>
+                                            setPasswordData({ ...passwordData, newPassword: e.target.value })
+                                        }
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <button className="form-submit-btn" type="submit">
+                                Update Password
+                            </button>
+                        </form>
                     </div>
                 )}
 

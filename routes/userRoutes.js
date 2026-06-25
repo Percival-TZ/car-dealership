@@ -5,7 +5,8 @@ const {
     getFavorites,
     removeFavorite,
     getProfile,
-    updateProfile
+    updateProfile,
+    changePassword
 } = require("../controllers/userController");
 
 const { protect } = require("../middleware/authMiddleware");
@@ -43,4 +44,11 @@ router.put(
     protect,
     updateProfile
 );
+
+router.put(
+    "/change-password",
+    protect,
+    changePassword
+);
+
 module.exports = router;

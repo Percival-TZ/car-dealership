@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Car = require("../models/Car");
+const bcrypt = require("bcrypt");
 
 // Add car to favorites
 const addFavorite = async (req, res) => {
@@ -126,10 +127,40 @@ const updateProfile = async (req, res) => {
     }
 };
 
+const changePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+        if (!newPassword || newPassword.length < 6) {
+            return res.status(400).json({
+                message: "New password must be at least 6 characters"
+            });
+        }
+
+        const user = await User.findById(req.user.id);
+
+        const match = await bcrypt.compare(currentPassword, user.password);
+        if (!match) {
+            return res.status(401).json({
+                message: "Current password is incorrect"
+            });
+        }
+
+        user.password = await bcrypt.hash(newPassword, 10);
+        await user.save();
+
+        res.json({ message: "Password changed successfully" });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
     addFavorite,
     getFavorites,
     removeFavorite,
     getProfile,
-    updateProfile
+    updateProfile,
+    changePassword
 };

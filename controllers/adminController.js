@@ -58,6 +58,29 @@ const getBookings = async (req, res) => {
     }
 };
 
+// Confirm a booking
+const confirmBooking = async (req, res) => {
+    try {
+        const booking = await Booking.findById(req.params.id);
+
+        if (!booking) {
+            return res.status(404).json({
+                message: "Booking not found"
+            });
+        }
+
+        booking.status = "confirmed";
+        await booking.save();
+
+        res.json({ message: "Booking confirmed", booking });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
 // Cancel (delete) a single booking
 const cancelBooking = async (req, res) => {
     try {
@@ -102,6 +125,7 @@ module.exports = {
     getDashboardStats,
     getUsers,
     getBookings,
+    confirmBooking,
     cancelBooking,
     clearBookings
 };
