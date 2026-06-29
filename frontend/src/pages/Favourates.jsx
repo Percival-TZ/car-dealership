@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api, { getImageUrl } from "../services/Api";
+import CarCard from "../components/CarCard";
 
 function Favorites() {
     const navigate = useNavigate();
@@ -26,7 +27,9 @@ function Favorites() {
         }
     };
 
-    const removeFavorite = async (carId) => {
+    const removeFavorite = async (e, carId) => {
+        e.preventDefault();
+        e.stopPropagation();
         try {
             await api.delete(`/users/favorites/${carId}`);
             setFavorites(favorites.filter((car) => car._id !== carId));
@@ -38,49 +41,38 @@ function Favorites() {
     if (loading) return <div className="container"><p>Loading...</p></div>;
 
     return (
-        <div className="container">
-            <h1>My Favorites</h1>
+        <>
+            <div className="page-header">
+                <h1>My Favorites</h1>
+                {favorites.length > 0 && (
+                    <p className="page-header-count">{favorites.length} car(s)</p>
+                )}
+            </div>
 
-            {favorites.length === 0 ? (
-                <div className="empty-state">
-                    <p>You have no favorite cars yet.</p>
-                    <Link to="/" className="auth-link">Browse available cars</Link>
-                </div>
-            ) : (
-                <div className="car-grid">
-                    {favorites.map((car) => (
-                        <div key={car._id} className="car-card">
-                            {car.images && car.images.length > 0 && (
-                                <img
-                                    src={getImageUrl(car.images[0])}
-                                    alt={car.title}
-                                    className="car-card-img"
-                                />
-                            )}
-                            <h2>{car.title}</h2>
-                            <span className={`condition-badge ${car.condition}`}>
-                                {car.condition === "new" ? "New" : "Used"}
-                            </span>
-                            <p><strong>Brand:</strong> {car.brand}</p>
-                            <p><strong>Year:</strong> {car.year}</p>
-                            <p><strong>Price:</strong> TZS {car.price.toLocaleString()}</p>
-
-                            <div className="card-actions">
-                                <Link to={`/cars/${car._id}`} className="view-btn">
-                                    View Details
-                                </Link>
+            <div className="inventory-section" style={{ paddingTop: "1.5rem" }}>
+                {favorites.length === 0 ? (
+                    <div className="empty-state">
+                        <p>You have no favorite cars yet.</p>
+                        <Link to="/" className="auth-link">Browse available cars</Link>
+                    </div>
+                ) : (
+                    <div className="car-grid">
+                        {favorites.map((car) => (
+                            <div key={car._id} className="favorite-card-wrapper">
                                 <button
-                                    className="remove-btn"
-                                    onClick={() => removeFavorite(car._id)}
+                                    className="favorite-remove-btn"
+                                    onClick={(e) => removeFavorite(e, car._id)}
+                                    title="Remove from favorites"
                                 >
-                                    Remove
+                                    &#10005;
                                 </button>
+                                <CarCard car={car} />
                             </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </>
     );
 }
 

@@ -8,6 +8,7 @@ function CarDetails() {
 
     const [car, setCar] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [selectedImage, setSelectedImage] = useState(0);
     const [orderDate, setOrderDate] = useState("");
     const [notes, setNotes] = useState("");
     const [favoriteMsg, setFavoriteMsg] = useState("");
@@ -55,94 +56,104 @@ function CarDetails() {
     if (loading) return <div className="container"><p>Loading...</p></div>;
     if (!car) return <div className="container"><p>Car not found.</p></div>;
 
+    const images = car.images && car.images.length > 0 ? car.images : [];
+
     return (
-        <div className="container">
+        <div className="car-details-page">
             <button className="back-btn" onClick={() => navigate(-1)}>
                 &larr; Back
             </button>
 
-            <div className="car-details-card">
-                {car.images && car.images.length > 0 && (
-                    <div className="car-images">
-                        {car.images.map((img, i) => (
+            <div className="car-details-layout">
+                {/* Gallery */}
+                <div>
+                    <div className="gallery-main">
+                        {images.length > 0 ? (
                             <img
-                                key={i}
-                                src={getImageUrl(img)}
+                                src={getImageUrl(images[selectedImage])}
                                 alt={car.title}
-                                className="car-detail-img"
                             />
-                        ))}
+                        ) : (
+                            <div className="car-card-no-image" style={{ height: "100%" }}>
+                                No Image Available
+                            </div>
+                        )}
                     </div>
-                )}
-
-                <div className="car-details-info">
-                    <h1>{car.title}</h1>
-
-                    <span className={`condition-badge ${car.condition}`}>
-                        {car.condition === "new" ? "New" : "Used"}
-                    </span>
-
-                    <div className="details-grid">
-                        <div className="detail-item">
-                            <span className="detail-label">Brand</span>
-                            <span className="detail-value">{car.brand}</span>
+                    {images.length > 1 && (
+                        <div className="gallery-thumbs">
+                            {images.map((img, i) => (
+                                <img
+                                    key={i}
+                                    src={getImageUrl(img)}
+                                    alt={`${car.title} ${i + 1}`}
+                                    className={`gallery-thumb ${selectedImage === i ? "active" : ""}`}
+                                    onClick={() => setSelectedImage(i)}
+                                />
+                            ))}
                         </div>
-                        <div className="detail-item">
-                            <span className="detail-label">Year</span>
-                            <span className="detail-value">{car.year}</span>
+                    )}
+                </div>
+
+                {/* Sidebar */}
+                <div className="car-details-sidebar">
+                    <div className="car-details-header">
+                        <h1>{car.title}</h1>
+                        <span className={`condition-badge ${car.condition}`}>
+                            {car.condition === "new" ? "New" : "Used"}
+                        </span>
+                    </div>
+
+                    <div className="car-details-price-block">
+                        <p className="car-details-price-label">Price</p>
+                        <p className="car-details-price">TZS {car.price.toLocaleString()}</p>
+                    </div>
+
+                    <div className="car-details-specs">
+                        <div className="spec-item">
+                            <span className="spec-label">Brand</span>
+                            <span className="spec-value">{car.brand}</span>
                         </div>
-                        <div className="detail-item">
-                            <span className="detail-label">Condition</span>
-                            <span className="detail-value" style={{ textTransform: "capitalize" }}>
+                        <div className="spec-item">
+                            <span className="spec-label">Year</span>
+                            <span className="spec-value">{car.year}</span>
+                        </div>
+                        <div className="spec-item">
+                            <span className="spec-label">Condition</span>
+                            <span className="spec-value" style={{ textTransform: "capitalize" }}>
                                 {car.condition}
                             </span>
                         </div>
-                        <div className="detail-item">
-                            <span className="detail-label">Price</span>
-                            <span className="detail-value price-tag">
-                                TZS {car.price.toLocaleString()}
-                            </span>
-                        </div>
-                        <div className="detail-item">
-                            <span className="detail-label">Availability</span>
-                            <span className={`detail-value ${car.quantity > 0 ? "stock-in" : "stock-out"}`}>
+                        <div className="spec-item">
+                            <span className="spec-label">Availability</span>
+                            <span className={`spec-value ${car.quantity > 0 ? "stock-in" : "stock-out"}`}>
                                 {car.quantity > 0 ? `${car.quantity} in stock` : "Out of stock"}
                             </span>
                         </div>
                     </div>
-                </div>
 
-                <div className="car-actions">
                     {user && user.role === "client" && (
-                        <div className="favorite-section">
-                            <button
-                                className="favorite-btn"
-                                onClick={handleAddFavorite}
-                            >
+                        <>
+                            <button className="favorite-btn" onClick={handleAddFavorite}>
                                 &#9825; Add to Favorites
                             </button>
-                            {favoriteMsg && (
-                                <p className="action-msg">{favoriteMsg}</p>
-                            )}
-                        </div>
+                            {favoriteMsg && <p className="action-msg">{favoriteMsg}</p>}
+                        </>
                     )}
 
-                    <div className="order-section">
+                    <div className="car-details-order">
                         <h2>Place an Order</h2>
 
                         {!user ? (
-                            <p>
-                                <Link to="/login">Log in</Link> to place an order.
+                            <p style={{ color: "var(--color-text-muted)" }}>
+                                <Link to="/login" className="auth-link">Sign in</Link> to place an order.
                             </p>
                         ) : user.role === "admin" ? (
-                            <p className="auth-subtitle">
+                            <p style={{ color: "var(--color-text-muted)" }}>
                                 Admins cannot place orders.
                             </p>
                         ) : (
                             <>
-                                {orderMsg && (
-                                    <p className="action-msg">{orderMsg}</p>
-                                )}
+                                {orderMsg && <p className="action-msg">{orderMsg}</p>}
                                 <form onSubmit={handleOrder} className="order-form">
                                     <label className="auth-label" htmlFor="order-date">
                                         Preferred Date
