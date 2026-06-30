@@ -21,7 +21,6 @@ function Navbar() {
                 </Link>
 
                 <div className="navbar-center">
-                    <Link to="/">Home</Link>
                     {user && user.role === "client" && (
                         <>
                             <Link to="/my-orders">My Orders</Link>
@@ -34,6 +33,8 @@ function Navbar() {
                 </div>
 
                 <div className="navbar-actions">
+                    <Link to="/" className="nav-home-link">Home</Link>
+
                     {user ? (
                         <>
                             <span className="nav-username">{user.username}</span>
@@ -47,60 +48,55 @@ function Navbar() {
                         </Link>
                     )}
 
-                    <button
-                        className="mobile-menu-btn"
-                        onClick={() => setMenuOpen(true)}
-                        aria-label="Open menu"
-                    >
-                        <span />
-                        <span />
-                        <span />
-                    </button>
+                    {user && (
+                        <button
+                            className="mobile-menu-btn"
+                            onClick={() => setMenuOpen(true)}
+                            aria-label="Open menu"
+                        >
+                            <span />
+                            <span />
+                            <span />
+                        </button>
+                    )}
                 </div>
             </div>
 
-            {menuOpen && (
+            {user && menuOpen && (
                 <div className="mobile-overlay" onClick={closeMenu} />
             )}
 
-            <div className={`mobile-drawer ${menuOpen ? "open" : ""}`}>
-                <div className="mobile-drawer-header">
-                    <span className="nav-brand">
-                        Auto<span className="nav-brand-accent">Dealer</span>
-                    </span>
-                    <button className="mobile-drawer-close" onClick={closeMenu}>
-                        &#10005;
-                    </button>
-                </div>
+            {user && (
+                <div className={`mobile-drawer ${menuOpen ? "open" : ""}`}>
+                    <div className="mobile-drawer-header">
+                        <span className="nav-brand">
+                            Auto<span className="nav-brand-accent">Dealer</span>
+                        </span>
+                        <button className="mobile-drawer-close" onClick={closeMenu}>
+                            &#10005;
+                        </button>
+                    </div>
 
-                <div className="mobile-drawer-nav">
-                    <Link to="/" onClick={closeMenu}>Home</Link>
+                    <div className="mobile-drawer-nav">
+                        {user.role === "client" && (
+                            <>
+                                <Link to="/my-orders" onClick={closeMenu}>My Orders</Link>
+                                <Link to="/favorites" onClick={closeMenu}>Favorites</Link>
+                            </>
+                        )}
 
-                    {user && user.role === "client" && (
-                        <>
-                            <Link to="/my-orders" onClick={closeMenu}>My Orders</Link>
-                            <Link to="/favorites" onClick={closeMenu}>Favorites</Link>
-                        </>
-                    )}
+                        {user.role === "admin" && (
+                            <Link to="/admin" onClick={closeMenu}>Dashboard</Link>
+                        )}
 
-                    {user && user.role === "admin" && (
-                        <Link to="/admin" onClick={closeMenu}>Dashboard</Link>
-                    )}
+                        <div className="mobile-drawer-divider" />
 
-                    <div className="mobile-drawer-divider" />
-
-                    {user ? (
                         <button onClick={() => { closeMenu(); logout(); }}>
                             Logout
                         </button>
-                    ) : (
-                        <>
-                            <Link to="/login" onClick={closeMenu}>Sign In</Link>
-                            <Link to="/register" onClick={closeMenu}>Register</Link>
-                        </>
-                    )}
+                    </div>
                 </div>
-            </div>
+            )}
         </nav>
     );
 }

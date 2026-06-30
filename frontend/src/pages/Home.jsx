@@ -7,6 +7,15 @@ function Home() {
     const [cars, setCars] = useState([]);
     const [activeCondition, setActiveCondition] = useState("all");
     const [activeBrand, setActiveBrand] = useState("all");
+    const [slideIndex, setSlideIndex] = useState(0);
+
+    const heroImages = [
+        "/hero/ford-mustang.jpeg",
+        "/hero/lambo-gallardo.jpeg",
+        "/hero/lambo-gallardo-p45.jpeg",
+        "/hero/range-rover.jpeg",
+        "/hero/toyota-supra.jpeg",
+    ];
 
     useEffect(() => {
         const fetchCars = async () => {
@@ -18,6 +27,13 @@ function Home() {
             }
         };
         fetchCars();
+    }, []);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setSlideIndex((prev) => (prev + 1) % heroImages.length);
+        }, 5000);
+        return () => clearInterval(timer);
     }, []);
 
     const brands = [...new Set(cars.map((c) => c.brand))];
@@ -37,6 +53,16 @@ function Home() {
         <>
             {/* Hero */}
             <section className="hero">
+                {/* Slideshow background */}
+                {heroImages.map((src, i) => (
+                    <div
+                        key={i}
+                        className={`hero-slide ${i === slideIndex ? "active" : ""}`}
+                        style={{ backgroundImage: `url(${src})` }}
+                    />
+                ))}
+                <div className="hero-overlay" />
+
                 <div className="hero-content">
                     <p className="hero-tagline">Premium Car Dealership</p>
                     <h1>Find the car that fits your life.</h1>
@@ -61,21 +87,6 @@ function Home() {
                         <button className="hero-cta-secondary" onClick={scrollToInventory}>
                             View All Cars
                         </button>
-                    </div>
-
-                    <div className="hero-stats">
-                        <div className="hero-stat">
-                            <div className="hero-stat-number">{cars.length}</div>
-                            <div className="hero-stat-label">Cars Available</div>
-                        </div>
-                        <div className="hero-stat">
-                            <div className="hero-stat-number">{brands.length}</div>
-                            <div className="hero-stat-label">Brands</div>
-                        </div>
-                        <div className="hero-stat">
-                            <div className="hero-stat-number">TZS</div>
-                            <div className="hero-stat-label">Transparent Pricing</div>
-                        </div>
                     </div>
                 </div>
             </section>

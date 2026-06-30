@@ -19,7 +19,12 @@
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
-      "Bash(curl -s -X POST https://car-dealership-412x.onrender.com/api/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@cardealership.com\",\"password\":\"admin123\"}')"
+      "Bash(curl -s -X POST https://car-dealership-412x.onrender.com/api/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@cardealership.com\",\"password\":\"admin123\"}')",
+      "Bash(mkdir -p /home/percival/Desktop/github/car-dealership/frontend/public/hero && cp /home/percival/Desktop/github/car-dealership/images/*.jpeg /home/percival/Desktop/github/car-dealership/frontend/public/hero/ && ls /home/percival/Desktop/github/car-dealership/frontend/public/hero/)",
+      "Bash(curl -s http://localhost:5173/hero/ford-mustang.jpeg -o /dev/null -w \"HTTP %{http_code}, size: %{size_download} bytes\\\\n\")"
+    ],
+    "additionalDirectories": [
+      "/home/percival/Desktop/github/car-dealership/images"
     ]
   }
 }

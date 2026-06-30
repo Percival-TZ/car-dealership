@@ -30,67 +30,62 @@ function Register() {
     };
 
     return (
-        <div className="auth-page">
-            <div className="auth-brand-panel">
-                <h2>Auto<span className="brand-accent">Dealer</span></h2>
-                <p>Your trusted car dealership</p>
-            </div>
+        <div className="auth-page-centered">
+            <div className="auth-card">
+                <h1>Create Account</h1>
+                <p className="auth-subtitle">
+                    Join us to browse and order cars
+                </p>
 
-            <div className="auth-form-panel">
-                <div className="auth-card">
-                    <h1>Create Account</h1>
-                    <p className="auth-subtitle">Join us to browse and order cars</p>
+                {error && <p className="auth-error">{error}</p>}
 
-                    {error && <p className="auth-error">{error}</p>}
+                <form onSubmit={handleSubmit}>
+                    <label className="auth-label" htmlFor="username">Username</label>
+                    <input
+                        id="username"
+                        className="auth-input"
+                        type="text"
+                        name="username"
+                        placeholder="Your name"
+                        value={formData.username}
+                        onChange={handleChange}
+                        required
+                    />
 
-                    <form onSubmit={handleSubmit}>
-                        <label className="auth-label" htmlFor="username">Username</label>
-                        <input
-                            id="username"
-                            className="auth-input"
-                            type="text"
-                            name="username"
-                            placeholder="Your name"
-                            value={formData.username}
-                            onChange={handleChange}
-                            required
-                        />
+                    <label className="auth-label" htmlFor="email">Email</label>
+                    <input
+                        id="email"
+                        className="auth-input"
+                        type="email"
+                        name="email"
+                        placeholder="you@example.com"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                    />
 
-                        <label className="auth-label" htmlFor="email">Email</label>
-                        <input
-                            id="email"
-                            className="auth-input"
-                            type="email"
-                            name="email"
-                            placeholder="you@example.com"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                        />
+                    <label className="auth-label" htmlFor="password">Password</label>
+                    <input
+                        id="password"
+                        className="auth-input"
+                        type="password"
+                        name="password"
+                        placeholder="Min 6 characters"
+                        value={formData.password}
+                        onChange={handleChange}
+                        minLength={6}
+                        required
+                    />
 
-                        <label className="auth-label" htmlFor="password">Password</label>
-                        <input
-                            id="password"
-                            className="auth-input"
-                            type="password"
-                            name="password"
-                            placeholder="Min 6 characters"
-                            value={formData.password}
-                            onChange={handleChange}
-                            minLength={6}
-                            required
-                        />
+                    <button className="auth-button" type="submit">
+                        Create Account
+                    </button>
+                </form>
 
-                        <button className="auth-button" type="submit">
-                            Create Account
-                        </button>
-                    </form>
-
-                    <p className="auth-footer">
-                        Already have an account?{" "}
-                        <Link to="/login" className="auth-link">Sign In</Link>
-                    </p>
-                </div>
+                <p className="auth-footer">
+                    Already have an account?{" "}
+                    <Link to="/login" className="auth-link">Sign In</Link>
+                </p>
             </div>
         </div>
     );
