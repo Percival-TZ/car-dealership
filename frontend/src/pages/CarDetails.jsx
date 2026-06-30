@@ -129,6 +129,13 @@ function CarDetails() {
                                 {car.quantity > 0 ? `${car.quantity} in stock` : "Out of stock"}
                             </span>
                         </div>
+
+                        {car.customFields && car.customFields.map((field, i) => (
+                            <div className="spec-item" key={i}>
+                                <span className="spec-label">{field.label}</span>
+                                <span className="spec-value">{field.value}</span>
+                            </div>
+                        ))}
                     </div>
 
                     {user && user.role === "client" && (

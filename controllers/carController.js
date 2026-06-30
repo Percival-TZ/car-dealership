@@ -2,8 +2,13 @@ const Car = require("../models/Car");
 
 const addCar = async (req, res) => {
     try {
+        const carData = { ...req.body };
+        if (carData.customFields) {
+            carData.customFields = JSON.parse(carData.customFields);
+        }
+
         const car = await Car.create({
-            ...req.body,
+            ...carData,
             images: req.files ? req.files.map(file => file.path) : [],
             createdBy: req.user.id
         });
@@ -92,6 +97,9 @@ const getCarById = async (req, res) => {
 const updateCar = async (req, res) => {
     try {
         const updateData = { ...req.body };
+        if (updateData.customFields) {
+            updateData.customFields = JSON.parse(updateData.customFields);
+        }
         if (req.files && req.files.length > 0) {
             updateData.images = req.files.map(file => file.path);
         }

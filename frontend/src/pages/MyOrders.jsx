@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import api from "../services/Api";
+import api, { getImageUrl } from "../services/Api";
 
 function MyOrders() {
     const navigate = useNavigate();
@@ -60,60 +60,72 @@ function MyOrders() {
                                 key={order._id}
                                 className={`order-card border-${order.status}`}
                             >
-                                <div className="order-card-header">
-                                    <h2>
-                                        {order.car
-                                            ? order.car.title
-                                            : "Car no longer available"}
-                                    </h2>
-                                    <span className={`status-badge ${order.status}`}>
-                                        {order.status.charAt(0).toUpperCase() +
-                                            order.status.slice(1)}
-                                    </span>
-                                </div>
-
-                                {order.car && (
-                                    <p>
-                                        <strong>Brand:</strong> {order.car.brand} &nbsp;|&nbsp;
-                                        <strong>Year:</strong> {order.car.year} &nbsp;|&nbsp;
-                                        <strong>Price:</strong> TZS{" "}
-                                        {order.car.price.toLocaleString()}
-                                    </p>
-                                )}
-
-                                <p>
-                                    <strong>Preferred Date:</strong>{" "}
-                                    {new Date(order.date).toLocaleString()}
-                                </p>
-
-                                {order.notes && (
-                                    <p>
-                                        <strong>Notes:</strong> {order.notes}
-                                    </p>
-                                )}
-
-                                <p className="order-placed">
-                                    Placed on{" "}
-                                    {new Date(order.createdAt).toLocaleDateString()}
-                                </p>
-
-                                <div className="card-actions">
-                                    {order.car && (
-                                        <Link
-                                            to={`/cars/${order.car._id}`}
-                                            className="view-btn"
-                                        >
-                                            View Car
-                                        </Link>
+                                <div className="order-card-content">
+                                    {order.car && order.car.images && order.car.images.length > 0 && (
+                                        <img
+                                            src={getImageUrl(order.car.images[0])}
+                                            alt={order.car.title}
+                                            className="order-card-img"
+                                        />
                                     )}
-                                    {order.status === "pending" && (
-                                        <button
-                                            className="remove-btn"
-                                            onClick={() => cancelOrder(order._id)}
-                                        >
-                                            Cancel Order
-                                        </button>
-                                    )}
+
+                                    <div className="order-card-details">
+                                        <div className="order-card-header">
+                                            <h2>
+                                                {order.car
+                                                    ? order.car.title
+                                                    : "Car no longer available"}
+                                            </h2>
+                                            <span className={`status-badge ${order.status}`}>
+                                                {order.status.charAt(0).toUpperCase() +
+                                                    order.status.slice(1)}
+                                            </span>
+                                        </div>
+
+                                        {order.car && (
+                                            <p>
+                                                <strong>Brand:</strong> {order.car.brand} &nbsp;|&nbsp;
+                                                <strong>Year:</strong> {order.car.year} &nbsp;|&nbsp;
+                                                <strong>Price:</strong> TZS{" "}
+                                                {order.car.price.toLocaleString()}
+                                            </p>
+                                        )}
+
+                                        <p>
+                                            <strong>Preferred Date:</strong>{" "}
+                                            {new Date(order.date).toLocaleString()}
+                                        </p>
+
+                                        {order.notes && (
+                                            <p>
+                                                <strong>Notes:</strong> {order.notes}
+                                            </p>
+                                        )}
+
+                                        <p className="order-placed">
+                                            Placed on{" "}
+                                            {new Date(order.createdAt).toLocaleDateString()}
+                                        </p>
+
+                                        <div className="card-actions">
+                                            {order.car && (
+                                                <Link
+                                                    to={`/cars/${order.car._id}`}
+                                                    className="view-btn"
+                                                >
+                                                    View Car
+                                                </Link>
+                                            )}
+                                            {order.status === "pending" && (
+                                                <button
+                                                    className="remove-btn"
+                                                    onClick={() => cancelOrder(order._id)}
+                                                >
+                                                    Cancel Order
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         ))}

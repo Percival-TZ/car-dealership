@@ -44,6 +44,16 @@ const carSchema = new mongoose.Schema(
         default: []
     },
 
+    customFields: {
+        type: [
+            {
+                label: { type: String, required: true },
+                value: { type: String, required: true }
+            }
+        ],
+        default: []
+    },
+
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"

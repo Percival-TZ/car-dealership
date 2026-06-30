@@ -45,6 +45,8 @@ function AdminDashboard() {
     });
     const [imageFiles, setImageFiles] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
+    const [customFields, setCustomFields] = useState([]);
+    const [editCustomFields, setEditCustomFields] = useState([]);
 
     const [passwordData, setPasswordData] = useState({ currentPassword: "", newPassword: "" });
     const [passwordMsg, setPasswordMsg] = useState({ text: "", ok: false });
@@ -94,6 +96,20 @@ function AdminDashboard() {
         setImagePreviews(files.map((f) => URL.createObjectURL(f)));
     };
 
+    const addCustomField = () => {
+        setCustomFields([...customFields, { label: "", value: "" }]);
+    };
+
+    const updateCustomField = (index, key, val) => {
+        const next = [...customFields];
+        next[index][key] = val;
+        setCustomFields(next);
+    };
+
+    const removeCustomField = (index) => {
+        setCustomFields(customFields.filter((_, i) => i !== index));
+    };
+
     const createCar = async (e) => {
         e.preventDefault();
         try {
@@ -104,6 +120,8 @@ function AdminDashboard() {
             data.append("price", formData.price);
             data.append("condition", formData.condition);
             data.append("quantity", formData.quantity);
+            const validFields = customFields.filter((f) => f.label.trim() && f.value.trim());
+            data.append("customFields", JSON.stringify(validFields));
             imageFiles.forEach((file) => data.append("images", file));
 
             await api.post("/cars/add", data);
@@ -111,6 +129,7 @@ function AdminDashboard() {
             setFormData({ title: "", brand: "", year: "", price: "", condition: "", quantity: "" });
             setImageFiles([]);
             setImagePreviews([]);
+            setCustomFields([]);
             fetchCars();
         } catch (err) {
             setFormError(
@@ -135,6 +154,11 @@ function AdminDashboard() {
                 ? car.images.map((img) => getImageUrl(img))
                 : []
         );
+        setEditCustomFields(
+            car.customFields && car.customFields.length > 0
+                ? car.customFields.map((f) => ({ label: f.label, value: f.value }))
+                : []
+        );
         setEditError("");
     };
 
@@ -149,6 +173,20 @@ function AdminDashboard() {
         setEditImagePreviews(files.map((f) => URL.createObjectURL(f)));
     };
 
+    const addEditCustomField = () => {
+        setEditCustomFields([...editCustomFields, { label: "", value: "" }]);
+    };
+
+    const updateEditCustomField = (index, key, val) => {
+        const next = [...editCustomFields];
+        next[index][key] = val;
+        setEditCustomFields(next);
+    };
+
+    const removeEditCustomField = (index) => {
+        setEditCustomFields(editCustomFields.filter((_, i) => i !== index));
+    };
+
     const saveEdit = async (e, id) => {
         e.preventDefault();
         try {
@@ -159,6 +197,8 @@ function AdminDashboard() {
             data.append("price", editFormData.price);
             data.append("condition", editFormData.condition);
             data.append("quantity", editFormData.quantity);
+            const validFields = editCustomFields.filter((f) => f.label.trim() && f.value.trim());
+            data.append("customFields", JSON.stringify(validFields));
             editImageFiles.forEach((file) => data.append("images", file));
 
             await api.put(`/cars/${id}`, data);
@@ -409,6 +449,46 @@ Logout
                                 </div>
                             )}
 
+                            <div className="custom-fields-section">
+                                <div className="custom-fields-header">
+                                    <label className="form-label">Custom Details</label>
+                                    <button
+                                        type="button"
+                                        className="admin-edit-btn"
+                                        style={{ flex: "none", padding: "6px 16px" }}
+                                        onClick={addCustomField}
+                                    >
+                                        + Add Field
+                                    </button>
+                                </div>
+
+                                {customFields.map((field, i) => (
+                                    <div key={i} className="custom-field-row">
+                                        <input
+                                            className="form-input"
+                                            type="text"
+                                            placeholder="Label (e.g. Mileage)"
+                                            value={field.label}
+                                            onChange={(e) => updateCustomField(i, "label", e.target.value)}
+                                        />
+                                        <input
+                                            className="form-input"
+                                            type="text"
+                                            placeholder="Value (e.g. 12,000 km)"
+                                            value={field.value}
+                                            onChange={(e) => updateCustomField(i, "value", e.target.value)}
+                                        />
+                                        <button
+                                            type="button"
+                                            className="custom-field-remove"
+                                            onClick={() => removeCustomField(i)}
+                                        >
+                                            &#10005;
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+
                             <button className="form-submit-btn" type="submit">
                                 Add Car
                             </button>
@@ -529,6 +609,47 @@ Logout
                                                         ))}
                                                     </div>
                                                 )}
+
+                                                <div className="custom-fields-section">
+                                                    <div className="custom-fields-header">
+                                                        <label className="form-label">Custom Details</label>
+                                                        <button
+                                                            type="button"
+                                                            className="admin-edit-btn"
+                                                            style={{ flex: "none", padding: "6px 16px" }}
+                                                            onClick={addEditCustomField}
+                                                        >
+                                                            + Add Field
+                                                        </button>
+                                                    </div>
+
+                                                    {editCustomFields.map((field, i) => (
+                                                        <div key={i} className="custom-field-row">
+                                                            <input
+                                                                className="form-input"
+                                                                type="text"
+                                                                placeholder="Label"
+                                                                value={field.label}
+                                                                onChange={(e) => updateEditCustomField(i, "label", e.target.value)}
+                                                            />
+                                                            <input
+                                                                className="form-input"
+                                                                type="text"
+                                                                placeholder="Value"
+                                                                value={field.value}
+                                                                onChange={(e) => updateEditCustomField(i, "value", e.target.value)}
+                                                            />
+                                                            <button
+                                                                type="button"
+                                                                className="custom-field-remove"
+                                                                onClick={() => removeEditCustomField(i)}
+                                                            >
+                                                                &#10005;
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
                                                 <div className="edit-form-actions">
                                                     <button className="form-submit-btn" type="submit">
                                                         Save
