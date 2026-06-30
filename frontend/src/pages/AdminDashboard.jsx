@@ -59,7 +59,7 @@ function AdminDashboard() {
 
     const fetchCars = async () => {
         try {
-            const res = await api.get("/cars");
+            const res = await api.get("/cars?limit=1000");
             setCars(res.data.cars);
         } catch (e) {
             console.error(e);

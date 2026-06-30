@@ -20,7 +20,7 @@ function Home() {
     useEffect(() => {
         const fetchCars = async () => {
             try {
-                const response = await api.get("/cars");
+                const response = await api.get("/cars?limit=1000");
                 setCars(response.data.cars);
             } catch (error) {
                 console.error(error);
