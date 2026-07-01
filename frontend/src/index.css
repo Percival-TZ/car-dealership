@@ -1495,6 +1495,16 @@ button { font-family: inherit; }
     align-items: center;
 }
 
+.custom-field-label-fixed {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    padding: 0 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .custom-field-remove {
     width: 32px;
     height: 32px;

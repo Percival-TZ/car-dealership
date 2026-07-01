@@ -2,6 +2,23 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import api, { getImageUrl } from "../services/Api";
 
+const DEFAULT_SPECS = [
+    "Mileage (km)",
+    "Engine Type",
+    "Transmission",
+    "Horsepower (hp)",
+    "Torque (Nm)",
+    "0-60 mph (sec)",
+    "Fuel Type",
+    "Color",
+    "Drive Type",
+    "Seating Capacity",
+    "Engine Displacement",
+    "Top Speed (km/h)",
+];
+
+const makeDefaultSpecs = () => DEFAULT_SPECS.map((label) => ({ label, value: "" }));
+
 const NAV_ITEMS = [
     { key: "add-car",   label: "Add Car"    },
     { key: "cars",      label: "Cars"       },
@@ -45,7 +62,7 @@ function AdminDashboard() {
     });
     const [imageFiles, setImageFiles] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
-    const [customFields, setCustomFields] = useState([]);
+    const [customFields, setCustomFields] = useState(makeDefaultSpecs);
     const [editCustomFields, setEditCustomFields] = useState([]);
 
     const [passwordData, setPasswordData] = useState({ currentPassword: "", newPassword: "" });
@@ -129,7 +146,7 @@ function AdminDashboard() {
             setFormData({ title: "", brand: "", year: "", price: "", condition: "", quantity: "" });
             setImageFiles([]);
             setImagePreviews([]);
-            setCustomFields([]);
+            setCustomFields(makeDefaultSpecs());
             fetchCars();
         } catch (err) {
             setFormError(
@@ -154,11 +171,11 @@ function AdminDashboard() {
                 ? car.images.map((img) => getImageUrl(img))
                 : []
         );
-        setEditCustomFields(
-            car.customFields && car.customFields.length > 0
-                ? car.customFields.map((f) => ({ label: f.label, value: f.value }))
-                : []
-        );
+        const existingMap = {};
+        (car.customFields || []).forEach((f) => { existingMap[f.label] = f.value; });
+        const merged = DEFAULT_SPECS.map((label) => ({ label, value: existingMap[label] || "" }));
+        const extras = (car.customFields || []).filter((f) => !DEFAULT_SPECS.includes(f.label));
+        setEditCustomFields([...merged, ...extras]);
         setEditError("");
     };
 
@@ -451,7 +468,7 @@ Logout
 
                             <div className="custom-fields-section">
                                 <div className="custom-fields-header">
-                                    <label className="form-label">Custom Details</label>
+                                    <label className="form-label">Vehicle Specs</label>
                                     <button
                                         type="button"
                                         className="admin-edit-btn"
@@ -464,17 +481,21 @@ Logout
 
                                 {customFields.map((field, i) => (
                                     <div key={i} className="custom-field-row">
+                                        {DEFAULT_SPECS.includes(field.label) ? (
+                                            <span className="custom-field-label-fixed">{field.label}</span>
+                                        ) : (
+                                            <input
+                                                className="form-input"
+                                                type="text"
+                                                placeholder="Label"
+                                                value={field.label}
+                                                onChange={(e) => updateCustomField(i, "label", e.target.value)}
+                                            />
+                                        )}
                                         <input
                                             className="form-input"
                                             type="text"
-                                            placeholder="Label (e.g. Mileage)"
-                                            value={field.label}
-                                            onChange={(e) => updateCustomField(i, "label", e.target.value)}
-                                        />
-                                        <input
-                                            className="form-input"
-                                            type="text"
-                                            placeholder="Value (e.g. 12,000 km)"
+                                            placeholder="Enter value"
                                             value={field.value}
                                             onChange={(e) => updateCustomField(i, "value", e.target.value)}
                                         />
@@ -612,7 +633,7 @@ Logout
 
                                                 <div className="custom-fields-section">
                                                     <div className="custom-fields-header">
-                                                        <label className="form-label">Custom Details</label>
+                                                        <label className="form-label">Vehicle Specs</label>
                                                         <button
                                                             type="button"
                                                             className="admin-edit-btn"
@@ -625,17 +646,21 @@ Logout
 
                                                     {editCustomFields.map((field, i) => (
                                                         <div key={i} className="custom-field-row">
+                                                            {DEFAULT_SPECS.includes(field.label) ? (
+                                                                <span className="custom-field-label-fixed">{field.label}</span>
+                                                            ) : (
+                                                                <input
+                                                                    className="form-input"
+                                                                    type="text"
+                                                                    placeholder="Label"
+                                                                    value={field.label}
+                                                                    onChange={(e) => updateEditCustomField(i, "label", e.target.value)}
+                                                                />
+                                                            )}
                                                             <input
                                                                 className="form-input"
                                                                 type="text"
-                                                                placeholder="Label"
-                                                                value={field.label}
-                                                                onChange={(e) => updateEditCustomField(i, "label", e.target.value)}
-                                                            />
-                                                            <input
-                                                                className="form-input"
-                                                                type="text"
-                                                                placeholder="Value"
+                                                                placeholder="Enter value"
                                                                 value={field.value}
                                                                 onChange={(e) => updateEditCustomField(i, "value", e.target.value)}
                                                             />
