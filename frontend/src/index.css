@@ -939,6 +939,50 @@ button { font-family: inherit; }
 
 .auth-link:hover { text-decoration: underline; }
 
+/* ── Email verification UI ── */
+.verify-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    margin: 0 auto 20px;
+}
+.verify-icon--success { background: #d1fae5; color: #065f46; }
+.verify-icon--error   { background: #fef2f2; color: #dc2626; }
+
+.auth-verify-box {
+    background: #fffbeb;
+    border: 1px solid #fcd34d;
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 0.88rem;
+    color: #78350f;
+}
+
+.auth-resend-btn {
+    margin-top: 8px;
+    background: none;
+    border: none;
+    color: var(--color-accent);
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+}
+.auth-resend-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.auth-verify-sent {
+    margin-top: 6px;
+    color: #065f46;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
 /* ══ PAGE HEADER ══ */
 .page-header {
     max-width: var(--max-width);
@@ -1311,6 +1355,124 @@ button { font-family: inherit; }
     padding: 28px;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
     max-width: 640px;
+}
+
+/* ── Notification badge in topbar ── */
+.admin-notif-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    padding: 6px 14px;
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fcd34d;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.admin-notif-badge:hover { background: #fde68a; }
+.admin-notif-icon { font-size: 1rem; }
+.admin-notif-count {
+    background: #d97706;
+    color: white;
+    border-radius: 10px;
+    padding: 1px 7px;
+    font-size: 0.78rem;
+}
+
+/* ── Login banner ── */
+.admin-login-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fffbeb;
+    border: 1px solid #fcd34d;
+    border-left: 4px solid #f59e0b;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    font-size: 0.9rem;
+    color: #78350f;
+}
+.admin-login-banner .admin-notif-icon { font-size: 1.2rem; flex-shrink: 0; }
+.admin-login-banner-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+.admin-login-banner-actions button:first-child {
+    padding: 5px 14px;
+    background: #f59e0b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.admin-login-banner-actions button:first-child:hover { background: #d97706; }
+.admin-login-banner-actions button:last-child {
+    padding: 5px 10px;
+    background: transparent;
+    border: 1px solid #fcd34d;
+    border-radius: 6px;
+    color: #92400e;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+/* ── Toast notification ── */
+.admin-toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #111827;
+    color: white;
+    border-left: 4px solid #f59e0b;
+    border-radius: 10px;
+    padding: 14px 18px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    z-index: 9999;
+    font-size: 0.9rem;
+    animation: slideInToast 0.3s ease;
+    max-width: 340px;
+}
+.admin-toast .admin-toast-icon { font-size: 1.1rem; flex-shrink: 0; }
+.admin-toast-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+.admin-toast-actions button:first-child {
+    padding: 4px 12px;
+    background: #f59e0b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.admin-toast-actions button:last-child {
+    padding: 4px 8px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+@keyframes slideInToast {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .admin-success {

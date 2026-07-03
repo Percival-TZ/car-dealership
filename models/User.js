@@ -29,7 +29,22 @@ const userSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Car"
         }
-    ]
+    ],
+
+    isVerified: {
+        type: Boolean,
+        default: true
+    },
+
+    verifyToken: {
+        type: String,
+        default: null
+    },
+
+    verifyTokenExpiry: {
+        type: Date,
+        default: null
+    }
 },
 {
     timestamps: true

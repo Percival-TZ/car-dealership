@@ -1,15 +1,11 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { registerUser } from "../services/authService";
 
 function Register() {
-    const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        username: "",
-        email: "",
-        password: ""
-    });
+    const [formData, setFormData] = useState({ username: "", email: "", password: "" });
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState(false);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,15 +15,38 @@ function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await registerUser(formData);
-            alert("Registration successful! Please log in.");
-            navigate("/login");
+            const res = await registerUser(formData);
+            const msg = res?.message || "";
+            if (msg.toLowerCase().includes("log in")) {
+                window.location.href = "/login";
+            } else {
+                setSuccess(true);
+            }
         } catch (err) {
             setError(
                 err.response?.data?.message || "Registration failed. Try again."
             );
         }
     };
+
+    if (success) {
+        return (
+            <div className="auth-page-centered">
+                <div className="auth-card">
+                    <div className="verify-icon verify-icon--success">&#9993;</div>
+                    <h1>Check your email</h1>
+                    <p className="auth-subtitle">
+                        We sent a verification link to <strong>{formData.email}</strong>.
+                        Click the link in that email to activate your account.
+                    </p>
+                    <p className="auth-footer" style={{ marginTop: "24px" }}>
+                        Already verified?{" "}
+                        <Link to="/login" className="auth-link">Sign In</Link>
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="auth-page-centered">

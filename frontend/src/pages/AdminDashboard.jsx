@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import api, { getImageUrl } from "../services/Api";
 
@@ -68,10 +68,19 @@ function AdminDashboard() {
     const [passwordData, setPasswordData] = useState({ currentPassword: "", newPassword: "" });
     const [passwordMsg, setPasswordMsg] = useState({ text: "", ok: false });
 
+    const [pendingCount, setPendingCount] = useState(0);
+    const [newOrderToast, setNewOrderToast] = useState("");
+    const [showLoginBanner, setShowLoginBanner] = useState(false);
+    const prevPendingRef = useRef(null);
+    const hasShownBannerRef = useRef(false);
+
     useEffect(() => {
         fetchCars();
         fetchUsers();
-        fetchBookings();
+        fetchBookings(false);
+
+        const pollInterval = setInterval(() => fetchBookings(true), 30000);
+        return () => clearInterval(pollInterval);
     }, []);
 
     const fetchCars = async () => {
@@ -92,10 +101,28 @@ function AdminDashboard() {
         }
     };
 
-    const fetchBookings = async () => {
+    const fetchBookings = async (isPolling = false) => {
         try {
             const res = await api.get("/admin/bookings");
-            setBookings(res.data);
+            const all = res.data;
+            setBookings(all);
+
+            const pending = all.filter((b) => b.status === "pending").length;
+            setPendingCount(pending);
+
+            if (isPolling && prevPendingRef.current !== null && pending > prevPendingRef.current) {
+                const diff = pending - prevPendingRef.current;
+                const msg = diff === 1 ? "1 new order received!" : `${diff} new orders received!`;
+                setNewOrderToast(msg);
+                setTimeout(() => setNewOrderToast(""), 6000);
+            }
+
+            if (!isPolling && pending > 0 && !hasShownBannerRef.current) {
+                setShowLoginBanner(true);
+                hasShownBannerRef.current = true;
+            }
+
+            prevPendingRef.current = pending;
         } catch (e) {
             console.error(e);
         }
@@ -343,10 +370,50 @@ Logout
                 <h1 className="admin-page-title">
                     {SECTION_TITLES[activeSection]}
                 </h1>
+                {pendingCount > 0 && (
+                    <button
+                        className="admin-notif-badge"
+                        onClick={() => navigate("bookings")}
+                        title={`${pendingCount} pending order${pendingCount !== 1 ? "s" : ""}`}
+                    >
+                        <span className="admin-notif-icon">&#128276;</span>
+                        <span className="admin-notif-count">{pendingCount}</span>
+                    </button>
+                )}
             </div>
+
+            {/* Toast notification */}
+            {newOrderToast && (
+                <div className="admin-toast">
+                    <span className="admin-toast-icon">&#128276;</span>
+                    <span>{newOrderToast}</span>
+                    <div className="admin-toast-actions">
+                        <button onClick={() => { setNewOrderToast(""); navigate("bookings"); }}>
+                            View
+                        </button>
+                        <button onClick={() => setNewOrderToast("")}>&#10005;</button>
+                    </div>
+                </div>
+            )}
 
             {/* Main content */}
             <main className="admin-main">
+
+                {/* Login banner */}
+                {showLoginBanner && (
+                    <div className="admin-login-banner">
+                        <span className="admin-notif-icon">&#128276;</span>
+                        <span>
+                            You have <strong>{pendingCount}</strong> pending order{pendingCount !== 1 ? "s" : ""} awaiting review.
+                        </span>
+                        <div className="admin-login-banner-actions">
+                            <button onClick={() => { setShowLoginBanner(false); navigate("bookings"); }}>
+                                View Orders
+                            </button>
+                            <button onClick={() => setShowLoginBanner(false)}>&#10005;</button>
+                        </div>
+                    </div>
+                )}
 
                 {/* ── ADD CAR ── */}
                 {activeSection === "add-car" && (
