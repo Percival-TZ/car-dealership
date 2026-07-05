@@ -87,12 +87,23 @@ const registerUser = async (req, res) => {
             verifyTokenExpiry,
         });
 
-        await sendVerificationEmail(email, username, verifyToken);
+        try {
+            await sendVerificationEmail(email, username, verifyToken);
+        } catch (emailError) {
+            console.error("Email send failed:", emailError.message);
+            return res.status(201).json({
+                message: "Account created! However, we could not send the verification email — please use the resend option on the login page.",
+                emailFailed: true,
+            });
+        }
 
         res.status(201).json({
             message: "Account created! Please check your email to verify your account.",
         });
     } catch (error) {
+        if (error.code === 11000) {
+            return res.status(400).json({ message: "An account with this email already exists." });
+        }
         res.status(500).json({ message: error.message });
     }
 };
