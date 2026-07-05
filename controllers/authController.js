@@ -5,10 +5,11 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp-relay.brevo.com",
+    port: 587,
     auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        pass: process.env.BREVO_SMTP_KEY,
     },
 });
 
@@ -16,7 +17,7 @@ const sendVerificationEmail = async (email, username, token) => {
     const verifyUrl = `${process.env.CLIENT_URL}/verify-email?token=${token}`;
 
     await transporter.sendMail({
-        from: `"AutoDealer" <${process.env.EMAIL_USER}>`,
+        from: `"AutoDealer" <${process.env.FROM_EMAIL}>`,
         to: email,
         subject: "Verify your AutoDealer account",
         html: `
